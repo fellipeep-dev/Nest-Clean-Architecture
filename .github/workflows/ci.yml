@@ -14,10 +14,6 @@ jobs:
     runs-on: ubuntu-latest
 
     services:
-      env:
-        NODE_ENV: test
-        DATABASE_URL: ${{ secrets.DATABASE_URL }}
-
       steps:
         - name: Debug env
           run: |
