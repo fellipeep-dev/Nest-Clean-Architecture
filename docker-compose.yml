@@ -1,5 +1,3 @@
-version: '3.9'
-
 services:
   app:
     build:
@@ -14,7 +12,7 @@ services:
       - db
       - redis
   db:
-    image: bitnami/postgresql:16.4.0
+    image: bitnami/postgresql:16
     restart: always
     ports:
       - '5432:5432'
