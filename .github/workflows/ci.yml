@@ -15,18 +15,22 @@ jobs:
 
     services:
       postgres:
-        image: bitnami/postgresql:16
+        image: bitnami/postgresql:16.4.0
         env:
-          POSTGRESQL_USERNAME: ${{secrets.POSTGRESQL_USERNAME}}
-          POSTGRESQL_PASSWORD: ${{secrets.POSTGRESQL_PASSWORD}}
-          POSTGRESQL_DATABASE: ${{secrets.POSTGRESQL_DATABASE}}
+          POSTGRESQL_USERNAME: ${{ secrets.POSTGRESQL_USERNAME }}
+          POSTGRESQL_PASSWORD: ${{ secrets.POSTGRESQL_PASSWORD }}
+          POSTGRESQL_DATABASE: ${{ secrets.POSTGRESQL_DATABASE }}
         ports:
           - 5432:5432
         options: >-
-          --health-cmd "pg_isready -U $POSTGRESQL_USERNAME -h localhost -p 5432"
+          --health-cmd "pg_isready -U $${POSTGRESQL_USERNAME} -h localhost -p 5432"
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
+
+    env:
+      DATABASE_URL: postgresql://${{ secrets.POSTGRESQL_USERNAME }}:${{ secrets.POSTGRESQL_PASSWORD }}@localhost:5432/${{ secrets.POSTGRESQL_DATABASE }}
+      NODE_ENV: test
 
     strategy:
       matrix:
@@ -42,22 +46,38 @@ jobs:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'
 
+      - name: Cache Prisma Client
+        uses: actions/cache@v4
+        with:
+          path: |
+            node_modules/.prisma
+            src/infra/database/prisma/generated
+          key: prisma-${{ hashFiles('prisma/schema.prisma', 'package-lock.json') }}
+
       - name: Install dependencies
         run: npm ci
-        env:
-          DATABASE_URL: 'postgresql://$POSTGRESQL_USERNAME:$POSTGRESQL_PASSWORD@localhost:5432/$POSTGRESQL_DATABASE'
-
-      - name: Check code formatting
-        run: npm run format:check
-        continue-on-error: false
 
       - name: Generate Prisma client
         run: npx prisma generate
 
+      - name: Wait for Postgres to be ready
+        run: |
+          echo "Waiting for Postgres..."
+          for i in {1..20}; do
+            if pg_isready -h localhost -p 5432 -U ${{ secrets.POSTGRESQL_USERNAME }}; then
+              echo "Postgres is ready!"
+              break
+            fi
+            echo "Waiting..."
+            sleep 2
+          done
+
       - name: Run database migrations
         run: npx prisma migrate deploy
-        env:
-          DATABASE_URL: 'postgresql://$POSTGRESQL_USERNAME:$POSTGRESQL_PASSWORD@localhost:5432/$POSTGRESQL_DATABASE'
+
+      - name: Check code formatting
+        run: npm run format:check
+        continue-on-error: false
 
       # - name: Run unit tests
       #   run: npm test
@@ -65,12 +85,6 @@ jobs:
       # - name: Run test coverage
       #   run: npm run test:cov
       #   continue-on-error: true
-
-      # - name: Upload coverage reports
-      #   uses: codecov/codecov-action@v3
-      #   if: matrix.node-version == '20.x'
-      #   with:
-      #     fail_ci_if_error: false
 
       - name: Build application
         run: npx nest build

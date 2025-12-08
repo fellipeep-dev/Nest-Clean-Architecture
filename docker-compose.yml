@@ -14,7 +14,7 @@ services:
       - db
       - redis
   db:
-    image: bitnami/postgresql:16
+    image: bitnami/postgresql:16.4.0
     restart: always
     ports:
       - '5432:5432'
