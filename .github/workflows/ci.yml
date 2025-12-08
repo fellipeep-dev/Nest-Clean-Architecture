@@ -15,7 +15,7 @@ jobs:
 
     services:
       postgres:
-        image: bitnami/postgresql:16
+        image: bitnami/postgresql:16.4.0
         env:
           POSTGRESQL_USERNAME: ${{ secrets.POSTGRESQL_USERNAME }}
           POSTGRESQL_PASSWORD: ${{ secrets.POSTGRESQL_PASSWORD }}
