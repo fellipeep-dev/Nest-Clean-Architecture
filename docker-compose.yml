@@ -8,6 +8,8 @@ services:
       - '3000:3000'
     env_file:
       - .env
+    environment:
+      DATABASE_URL: postgresql://${POSTGRESQL_USERNAME}:${POSTGRESQL_PASSWORD}@db:5432/${POSTGRESQL_DATABASE}?schema=public
     depends_on:
       - db
       - redis

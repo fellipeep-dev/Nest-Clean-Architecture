@@ -42,5 +42,8 @@ COPY --from=build /app/dist ./dist
 # Expor a porta
 EXPOSE $PORT
 
+# Definir variável de ambiente para produção
+ENV NODE_ENV=production
+
 # Comando para iniciar a aplicação
 CMD ["sh", "-c", "npx prisma migrate deploy && npx prisma generate && node dist/main.js"]
