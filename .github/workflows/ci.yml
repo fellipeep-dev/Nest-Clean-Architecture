@@ -62,7 +62,7 @@ jobs:
         run: |
           echo "Waiting for Postgres..."
           for i in {1..20}; do
-            if pg_isready -h localhost -p 5432 -U ${{ secrets.POSTGRESQL_USERNAME }}; then
+            if pg_isready -h localhost -p 5432 -U $${POSTGRES_USER}; then
               echo "Postgres is ready!"
               break
             fi
