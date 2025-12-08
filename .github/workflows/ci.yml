@@ -28,10 +28,6 @@ jobs:
           --health-timeout 5s
           --health-retries 5
 
-      env:
-        NODE_ENV: test
-        DATABASE_URL: postgresql://$${POSTGRES_USER}:$${POSTGRES_PASSWORD}@localhost:5432/$${POSTGRES_DB}?schema=public
-
     strategy:
       matrix:
         node-version: [22.x]
@@ -59,6 +55,8 @@ jobs:
 
       - name: Generate Prisma client
         run: npx prisma generate
+        env:
+          DATABASE_URL: postgresql://$${POSTGRES_USER}:$${POSTGRES_PASSWORD}@localhost:5432/$${POSTGRES_DB}?schema=public
 
       - name: Wait for Postgres to be ready
         run: |
@@ -74,6 +72,8 @@ jobs:
 
       - name: Run database migrations
         run: npx prisma migrate deploy
+        env:
+          DATABASE_URL: postgresql://$${POSTGRES_USER}:$${POSTGRES_PASSWORD}@localhost:5432/$${POSTGRES_DB}?schema=public
 
       - name: Check code formatting
         run: npm run format:check
