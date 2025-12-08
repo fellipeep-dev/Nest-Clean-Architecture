@@ -28,6 +28,10 @@ jobs:
           --health-timeout 5s
           --health-retries 5
 
+      env:
+        NODE_ENV: test
+        DATABASE_URL: postgresql://$${POSTGRES_USER}:$${POSTGRES_PASSWORD}@localhost:5432/$${POSTGRES_DB}?schema=public
+
     strategy:
       matrix:
         node-version: [22.x]
@@ -41,12 +45,6 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'
-
-      - name: Debug env
-        run: |
-          echo "User: $POSTGRES_USER"
-          echo "Password: $POSTGRES_PASSWORD"
-          echo "DB: $POSTGRES_DB"
 
       - name: Cache Prisma Client
         uses: actions/cache@v4
