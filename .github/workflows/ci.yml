@@ -1,0 +1,76 @@
+name: CI
+
+on:
+  workflow_dispatch:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+
+jobs:
+  test-and-build:
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: bitnami/postgresql:16
+        env:
+          POSTGRESQL_USERNAME: ${{secrets.POSTGRESQL_USERNAME}}
+          POSTGRESQL_PASSWORD: ${{secrets.POSTGRESQL_PASSWORD}}
+          POSTGRESQL_DATABASE: ${{secrets.POSTGRESQL_DATABASE}}
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U $POSTGRESQL_USERNAME -h localhost -p 5432"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    strategy:
+      matrix:
+        node-version: [22.x]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+        env:
+          DATABASE_URL: 'postgresql://$POSTGRESQL_USERNAME:$POSTGRESQL_PASSWORD@localhost:5432/$POSTGRESQL_DATABASE'
+
+      - name: Check code formatting
+        run: npm run format:check
+        continue-on-error: false
+
+      - name: Generate Prisma client
+        run: npx prisma generate
+
+      - name: Run database migrations
+        run: npx prisma migrate deploy
+        env:
+          DATABASE_URL: 'postgresql://$POSTGRESQL_USERNAME:$POSTGRESQL_PASSWORD@localhost:5432/$POSTGRESQL_DATABASE'
+
+      # - name: Run unit tests
+      #   run: npm test
+
+      # - name: Run test coverage
+      #   run: npm run test:cov
+      #   continue-on-error: true
+
+      # - name: Upload coverage reports
+      #   uses: codecov/codecov-action@v3
+      #   if: matrix.node-version == '20.x'
+      #   with:
+      #     fail_ci_if_error: false
+
+      - name: Build application
+        run: npx nest build
