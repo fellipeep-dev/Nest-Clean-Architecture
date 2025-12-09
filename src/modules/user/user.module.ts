@@ -9,6 +9,7 @@ import { FindUserByIdHandler } from './use-cases/queries/find-by-id/find-user-by
 import { FindUserByEmailHandler } from './use-cases/queries/find-by-email/find-user-by-email.handler';
 import { UpdateUserHandler } from './use-cases/commands/update/update-user.handler';
 import { DeleteUserHandler } from './use-cases/commands/delete/delete-user.handler';
+import { IUserService } from './services/iuser.service';
 
 @Module({
   controllers: [UserController],
@@ -19,9 +20,9 @@ import { DeleteUserHandler } from './use-cases/commands/delete/delete-user.handl
     FindUserByEmailHandler,
     UpdateUserHandler,
     DeleteUserHandler,
-    UserService,
     { provide: IUserRepository, useClass: UserRepository },
+    { provide: IUserService, useClass: UserService },
   ],
-  exports: [UserService],
+  exports: [IUserService],
 })
 export class UserModule {}
