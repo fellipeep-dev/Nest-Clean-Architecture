@@ -20,14 +20,7 @@ export class UserService implements IUserService {
   async CreateUser(
     createUserDto: CreateUserDto,
   ): Promise<{ actionId: string }> {
-    return this.commandBus.execute(
-      new CreateUserCommand(
-        createUserDto.name,
-        createUserDto.email,
-        createUserDto.password,
-        createUserDto.profilePictureUrl,
-      ),
-    );
+    return this.commandBus.execute(new CreateUserCommand(createUserDto));
   }
 
   async FindAllUsers(): Promise<UserEntity[]> {
@@ -43,14 +36,7 @@ export class UserService implements IUserService {
   }
 
   async UpdateUser(id: string, updateUserDto: UpdateUserDto): Promise<void> {
-    return this.commandBus.execute(
-      new UpdateUserCommand(
-        id,
-        updateUserDto.name,
-        updateUserDto.email,
-        updateUserDto.profilePictureUrl,
-      ),
-    );
+    return this.commandBus.execute(new UpdateUserCommand(id, updateUserDto));
   }
 
   async DeleteUser(id: string): Promise<void> {

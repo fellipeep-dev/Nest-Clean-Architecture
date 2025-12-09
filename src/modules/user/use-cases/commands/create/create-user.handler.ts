@@ -9,17 +9,19 @@ export class CreateUserHandler implements ICommandHandler<CreateUserCommand> {
   constructor(private readonly userRepository: IUserRepository) {}
 
   async execute(command: CreateUserCommand): Promise<{ actionId: string }> {
-    const { password, email } = command;
+    const { data } = command;
 
-    const emailAlreadyExists = await this.userRepository.findByEmail(email);
+    const emailAlreadyExists = await this.userRepository.findByEmail(
+      data.email,
+    );
 
     if (emailAlreadyExists)
       throw new HttpException('email already exists', HttpStatus.CONFLICT);
 
-    const hashedPassword = await hash(password);
+    const hashedPassword = await hash(data.password);
 
     const user = await this.userRepository.create({
-      ...command,
+      ...data,
       password: hashedPassword,
     });
 
