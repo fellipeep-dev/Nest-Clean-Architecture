@@ -1,6 +1,7 @@
 import { Inject } from '@nestjs/common';
 import { PrismaService } from 'src/infra/database/prisma/prisma.service';
 import { AuditableEntity, BaseEntity } from '../entity';
+import { QueryBuilderEntity } from '@entities';
 
 export abstract class RepositoryFactory<
   E extends object = BaseEntity | AuditableEntity,
@@ -32,12 +33,8 @@ export abstract class RepositoryFactory<
     });
   }
 
-  findAll(): Promise<E[]> {
-    return (this.prismaService as any)[this.model].findMany({
-      where: {
-        deletedAt: null,
-      },
-    });
+  findAll(query: QueryBuilderEntity): Promise<E[]> {
+    return (this.prismaService as any)[this.model].findMany(query);
   }
 
   findManyWithIds(ids: string[]): Promise<E[]> {

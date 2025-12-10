@@ -1,4 +1,4 @@
-import { CreateUserDto, UpdateUserDto } from '@dtos';
+import { CreateUserDto, QueryParamsDto, UpdateUserDto } from '@dtos';
 import { Injectable } from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { CreateUserCommand } from '../use-cases/commands/create/create-user.command';
@@ -23,8 +23,8 @@ export class UserService implements IUserService {
     return this.commandBus.execute(new CreateUserCommand(createUserDto));
   }
 
-  async FindAllUsers(): Promise<UserEntity[]> {
-    return this.queryBus.execute(new FindAllUsersQuery());
+  async FindAllUsers(query: QueryParamsDto): Promise<UserEntity[]> {
+    return this.queryBus.execute(new FindAllUsersQuery(query));
   }
 
   async FindUserById(id: string): Promise<UserEntity | null> {

@@ -6,9 +6,11 @@ import {
   Param,
   Post,
   Put,
+  Query,
 } from '@nestjs/common';
 import { IUserService } from '../services/iuser.service';
-import { CreateUserDto, UpdateUserDto } from '@dtos';
+import { CreateUserDto, QueryParamsDto, UpdateUserDto } from '@dtos';
+import { QueryConditionsPipe } from 'src/common/pipes';
 
 @Controller('user')
 export class UserController {
@@ -20,8 +22,8 @@ export class UserController {
   }
 
   @Get()
-  findAllUsers() {
-    return this.userService.FindAllUsers();
+  findAllUsers(@Query(new QueryConditionsPipe()) query: QueryParamsDto) {
+    return this.userService.FindAllUsers(query);
   }
 
   @Get('id/:id')
@@ -34,12 +36,12 @@ export class UserController {
     return this.userService.FindUserByEmail(email);
   }
 
-  @Put(':id')
+  @Put('id/:id')
   updateUser(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
     return this.userService.UpdateUser(id, updateUserDto);
   }
 
-  @Delete(':id')
+  @Delete('id/:id')
   deleteUser(@Param('id') id: string) {
     return this.userService.DeleteUser(id);
   }
