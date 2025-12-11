@@ -4,6 +4,7 @@ import { PrismaModule } from './infra/database/prisma/prisma.module';
 import { UserModule } from './modules/user/user.module';
 import { CqrsModule } from '@nestjs/cqrs';
 import { HealthModule } from './modules/health/health.module';
+import { RedisModule } from './infra/redis/redis.module';
 
 @Module({
   imports: [
@@ -12,9 +13,9 @@ import { HealthModule } from './modules/health/health.module';
     }),
     CqrsModule.forRoot(),
     PrismaModule,
+    RedisModule,
     UserModule,
     HealthModule,
   ],
-  providers: [],
 })
 export class AppModule {}
