@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { CacheModule } from '@nestjs/cache-manager';
 import { ConfigService } from '@nestjs/config';
-import { redisStore } from 'cache-manager-ioredis-yet';
+import * as redisStore from 'cache-manager-redis-store';
 
 @Module({
   imports: [
@@ -9,10 +9,9 @@ import { redisStore } from 'cache-manager-ioredis-yet';
       isGlobal: true,
       inject: [ConfigService],
       useFactory: async (config: ConfigService) => ({
-        store: await redisStore({
-          url: config.get<string>('REDIS_URL'),
-        }),
-        ttl: 10 * 1000,
+        store: redisStore,
+        url: config.get<string>('REDIS_URL') ?? 'redis://localhost:6379',
+        ttl: 10,
       }),
     }),
   ],
