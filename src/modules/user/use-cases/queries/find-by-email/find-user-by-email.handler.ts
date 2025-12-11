@@ -21,6 +21,8 @@ export class FindUserByEmailHandler implements IQueryHandler<FindUserByEmailQuer
 
     const user = await this.userRepository.findByEmail(query.email);
 
+    await this.cache.set(cacheKey, user, 5000);
+
     return user;
   }
 }

@@ -21,6 +21,8 @@ export class FindUserByIdHandler implements IQueryHandler<FindUserByIdQuery> {
 
     const user = await this.userRepository.findById(query.id);
 
+    await this.cache.set(cacheKey, user, 5000);
+
     return user;
   }
 }
