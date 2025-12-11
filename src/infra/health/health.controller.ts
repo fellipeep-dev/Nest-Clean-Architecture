@@ -3,12 +3,10 @@ import {
   HealthCheck,
   HealthCheckService,
   HttpHealthIndicator,
-  MicroserviceHealthIndicator,
   PrismaHealthIndicator,
 } from '@nestjs/terminus';
 import { PrismaService } from 'src/infra/database/prisma/prisma.service';
-import { Transport } from '@nestjs/microservices';
-import { ConfigService } from '@nestjs/config';
+import { RedisHealthIndicator } from './redis.health';
 
 @Controller('health')
 export class HealthController {
@@ -17,8 +15,7 @@ export class HealthController {
     private readonly http: HttpHealthIndicator,
     private readonly prisma: PrismaHealthIndicator,
     private readonly prismaService: PrismaService,
-    private readonly micro: MicroserviceHealthIndicator,
-    private readonly config: ConfigService,
+    private readonly redisHealth: RedisHealthIndicator,
   ) {}
 
   @Get('liveness')
@@ -39,16 +36,8 @@ export class HealthController {
   readiness() {
     return this.health.check([
       () => this.prisma.pingCheck('database', this.prismaService),
-
       () => this.http.pingCheck('api', 'http://localhost:3000/health/ping'),
-
-      () =>
-        this.micro.pingCheck('redis', {
-          transport: Transport.REDIS,
-          options: {
-            url: this.config.get<string>('REDIS_URL'),
-          },
-        }),
+      () => this.redisHealth.isHealthy('redis'),
     ]);
   }
 }
