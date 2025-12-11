@@ -1,36 +1,183 @@
-# 🌊 Vizinho D'Água API
+# 🚀 Nest Clean Architecture Template
 
-API do projeto **Vizinho D'Água**, voltada para gestão de denúncias, conteúdos educacionais e alertas relacionados a problemas de abastecimento de água.
+Um template completo, escalável e profissional para a construção de APIs utilizando **NestJS**, focado em **Clean Architecture**, alta performance e organização.
 
-O projeto segue o padrão **Clean Architecture** com **DDD + CQRS**, separando claramente domínio, aplicação e infraestrutura.
+Ideal para iniciar novos projetos com uma base sólida, desacoplada e preparada para o ambiente de produção. 
+
+---
+
+## 🧱 Tecnologias e Padrões de Design
+
+A base deste projeto foi construída utilizando as seguintes tecnologias e padrões:
+
+| Categoria | Tecnologia/Padrão | Descrição |
+| :--- | :--- | :--- |
+| **Framework** | **NestJS** | Framework Node.js para aplicações server-side escaláveis. |
+| **Linguagem** | TypeScript | Garante tipagem estática e maior manutenibilidade. |
+| **Arquitetura** | **Clean Architecture** | Separação clara de camadas e regras de negócio puras. |
+| **Padrão** | **CQRS Module** | Command Query Responsibility Segregation (Leitura/Escrita). |
+| **ORM** | **Prisma** | Moderno ORM Type-safe para acesso ao banco de dados. |
+| **Banco de Dados** | **PostgreSQL 16** | Banco de dados relacional robusto. |
+| **Cache/Mensageria** | **Redis 7** | Utilizado para cache de alta velocidade e escalabilidade. |
+| **Containerização** | **Docker & Docker Compose** | Ambiente de desenvolvimento e produção isolado. |
 
 ---
 
-## 🚀 Principais Features
+## ⚙️ Configuração e Ambiente
 
-- **📣 Gestão de Alertas**
-  - Criação automática de alertas a partir de denúncias agrupadas por localidade.
-  - Preenchimento automático de endereço via CEP (Integração com ViaCEP).
-  - Controle de status: Em verificação, Verificado, Descartado, Oficial.
+### Variáveis de Ambiente
 
-- **📝 Gestão de Denúncias**
-  - Criar, editar e consultar denúncias.
-  - Encaminhamento automático para órgãos competentes após processamento.
-  - Agrupamento por localidade para gerar alertas.
+Para que a aplicação e os serviços funcionem corretamente, é necessário configurar as variáveis de ambiente.
 
-- **📚 Conteúdos Educacionais**
-  - CRUD de conteúdos educativos com diferentes categorias.
-  - Acesso direto do menu principal.
+* Crie um arquivo **`.env`** na raiz do projeto.
+* Utilize o arquivo **`.env.example`** como base para garantir que todas as chaves necessárias (conexões de banco de dados, Redis, etc.) sejam definidas.
 
-- **🔔 Notificações**
-  - Disparo automático com base no status de alertas ou informes oficiais.
-  - Usuários recebem notificações filtradas por localidade.
+### 🐳 Docker Compose (Postgres + Redis + API)
 
-- **🛠 Integrações Externas**
-  - ViaCEP para busca de endereço a partir do CEP.
+O template foi desenvolvido para ser executado de forma isolada e consistente.
 
-- **📄 Documentação Interativa**
-  - Swagger disponível para teste de todos os endpoints.
-  - Acessível em `http://localhost:3000/swagger` quando rodando localmente.
+* O projeto inclui um **`Dockerfile`** para a aplicação NestJS e um **`docker-compose.yml`** completo.
+* Este ambiente dockerizado já configura e orquestra todos os serviços necessários: a **API NestJS**, o **PostgreSQL** e o **Redis**. 
+* Isso garante um ambiente de desenvolvimento e testes idêntico ao de produção.
 
 ---
+
+## ▶️ Como Executar o Projeto
+
+Para iniciar o projeto, a abordagem recomendada é utilizar o Docker Compose, que configura automaticamente todos os serviços necessários (API NestJS, PostgreSQL e Redis).
+
+### 1. 🛠️ Pré-requisitos e Configuração
+
+Certifique-se de ter o **Docker** e o **Docker Compose** instalados.
+
+| Passo | Comando | Descrição |
+| :--- | :--- | :--- |
+| **Instalar Dependências** | `npm install` | Instala todos os pacotes Node.js/TypeScript. |
+| **Configurar o Ambiente** | `cp .env.example .env` | Cria o arquivo `.env` de configuração na raiz do projeto. |
+
+### 2. 🐳 Iniciar com Docker Compose (Recomendado)
+
+Utilize este comando para construir a imagem da API e subir todos os contêineres em *background*:
+
+```bash
+docker compose up --build -d
+```
+
+### 3. 🔗 Acesso aos Serviços
+
+Após executar a aplicação com `docker compose up`, você pode acessar os principais serviços e ferramentas nos seguintes endereços/comandos:
+
+| Serviço | Acesso | Notas |
+| :--- | :--- | :--- |
+| **API NestJS** | `http://localhost:3000` | Endpoint base da aplicação. |
+| **Prisma Studio** | `npx prisma studio` | Ferramenta visual para navegar e gerenciar os dados do banco. |
+
+### 4. 💻 Execução Local (Apenas a API)
+
+Se preferir rodar a API diretamente na sua máquina, assumindo que PostgreSQL e Redis já estejam acessíveis, utilize este comando:
+
+```bash
+npm run start:dev
+```
+
+---
+
+## 📂 Estrutura do Projeto (Clean Architecture)
+
+A arquitetura do projeto segue rigorosamente os princípios de **Clean Architecture**, garantindo **desacoplamento** entre as camadas e alta **manutenibilidade**. 
+
+A organização principal das pastas reflete as responsabilidades de cada camada:
+
+### 🌳 Visualização da Hierarquia
+
+src/
+
+├── common/               # Código reutilizável (helpers, decorators, utils, pipes, filters, etc.)
+
+├── domain/               # Entidades, DTOs e regras de negócio puras
+
+├── infra/                # Implementações de infraestrutura
+
+│   ├── database/prisma/  # Configuração Prisma, client
+
+│   ├── redis/            # Provider Redis
+
+│   └── health/           # Health checks (liveness/readiness)
+
+└── modules/              # Módulos de features
+
+|   └── example/
+
+|       ├── controllers/  # Controllers HTTP
+
+|       ├── repositories/ # Interfaces + implementações
+
+|       ├── services/     # Serviços específicos da feature
+
+|       └── use-cases/    # Commands, Queries e Handlers (CQRS)
+
+## 🧩 Sobre Cada Camada
+
+Cada camada do projeto possui uma responsabilidade clara, seguindo o princípio da **Inversão de Dependência** da Clean Architecture. 
+
+| Camada | Responsabilidade | Conteúdo Principal | Dependências |
+| :--- | :--- | :--- | :--- |
+| **`common/`** | Utilitários reutilizáveis para toda a aplicação. | Helpers, Decorators, Pipes, Filters, e códigos que não dependem de features específicas. | Nenhuma dependência do domínio ou infra. |
+| **`domain/`** | **Regras de Negócio Puras.** O Core da Aplicação. | Entidades e DTOs que representam o estado e as regras do domínio. | Nenhuma dependência externa. |
+| **`infra/`** | Implementações concretas de tecnologias. | **Prisma Client**, **Redis Provider**, **Health Checks** e implementação da Persistência de Dados. | Depende das tecnologias externas. |
+| **`modules/`** | Funcionalidades Específicas (Features). | Contém o ciclo completo de uma feature, incluindo **Controller**, **Repository**, **Service** e **Use Cases (CQRS)**. | Depende de `domain/` e `infra/`. |
+
+### Detalhamento das Camadas
+
+#### **`domain/` (Domínio)**
+É o centro da aplicação. Contém a **lógica pura** de negócio, livre de qualquer implementação tecnológica (como banco de dados ou framework).
+
+#### **`infra/` (Infraestrutura)**
+É a camada mais externa. Responsável por traduzir as interfaces definidas no domínio para implementações concretas (ex: como salvar uma Entidade usando o Prisma).
+
+#### **`modules/` (Módulos de Feature)**
+Agrupa toda a lógica de uma funcionalidade. É onde o **CQRS** é aplicado, orquestrando as operações de leitura e escrita através dos *Use Cases*.
+
+🗃️ Prisma ORM
+Criar migrações
+npx prisma migrate dev
+
+Abrir Prisma Studio
+npx prisma studio
+
+⚡ Arquitetura CQRS
+
+O projeto já vem preparado com:
+
+Commands (operações de escrita)
+
+Queries (operações de leitura)
+
+Handlers
+
+Use Cases organizados por módulo
+
+Exemplo de estrutura:
+
+modules/
+  user/
+    use-cases/
+      commands/
+        create-user.command.ts
+        create-user.handler.ts
+      queries/
+        find-user.query.ts
+        find-user.handler.ts
+
+🧰 Health Checks
+
+Endpoints padrão:
+
+Liveness
+GET /health/liveness
+
+Readiness
+GET /health/readiness
+
+
+Utilizados automaticamente no Docker.
