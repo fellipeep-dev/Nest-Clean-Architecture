@@ -14,6 +14,15 @@
       "@abstractions": [
         "src/common/abstractions"
       ],
+      "@errors": [
+        "src/common/errors"
+      ],
+      "@filters": [
+        "src/common/filters"
+      ],
+      "@pipes": [
+        "src/common/pipes"
+      ],
       "@utils": [
         "src/common/utils"
       ],

@@ -10,7 +10,7 @@ import {
 } from '@nestjs/common';
 import { IUserService } from '../services/iuser.service';
 import { CreateUserDto, QueryParamsDto, UpdateUserDto } from '@dtos';
-import { QueryConditionsPipe } from 'src/common/pipes';
+import { QueryConditionsPipe } from '@pipes';
 
 @Controller('user')
 export class UserController {

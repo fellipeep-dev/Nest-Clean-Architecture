@@ -4,25 +4,22 @@ import { IUserRepository } from 'src/modules/user/repositories/iuser.repository'
 import { HttpException, HttpStatus, Inject } from '@nestjs/common';
 import { Cache, CACHE_MANAGER } from '@nestjs/cache-manager';
 import { CacheKeys } from '@utils';
+import { IUserValidationService } from 'src/modules/user/services/iuser-validation.service';
 
 @CommandHandler(UpdateUserCommand)
 export class UpdateUserHandler implements ICommandHandler<UpdateUserCommand> {
   constructor(
     private readonly userRepository: IUserRepository,
+    private readonly userValidationService: IUserValidationService,
     @Inject(CACHE_MANAGER) private readonly cache: Cache,
   ) {}
 
   async execute(command: UpdateUserCommand): Promise<void> {
     const { id, data } = command;
 
-    if (data.email) {
-      const emailAlreadyExists = await this.userRepository.findByEmail(
-        data.email,
-      );
+    await this.userValidationService.doesUserExist(id);
 
-      if (emailAlreadyExists)
-        throw new HttpException('email already exists', HttpStatus.CONFLICT);
-    }
+    if (data.email) await this.userValidationService.isEmailUnique(data.email);
 
     const user = await this.userRepository.findById(id);
 

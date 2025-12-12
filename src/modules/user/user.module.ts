@@ -10,6 +10,8 @@ import { FindUserByEmailHandler } from './use-cases/queries/find-by-email/find-u
 import { UpdateUserHandler } from './use-cases/commands/update/update-user.handler';
 import { DeleteUserHandler } from './use-cases/commands/delete/delete-user.handler';
 import { IUserService } from './services/iuser.service';
+import { IUserValidationService } from './services/iuser-validation.service';
+import { UserValidationService } from './services/user-validation.service';
 
 @Module({
   controllers: [UserController],
@@ -22,6 +24,7 @@ import { IUserService } from './services/iuser.service';
     DeleteUserHandler,
     { provide: IUserRepository, useClass: UserRepository },
     { provide: IUserService, useClass: UserService },
+    { provide: IUserValidationService, useClass: UserValidationService },
   ],
   exports: [IUserService],
 })
