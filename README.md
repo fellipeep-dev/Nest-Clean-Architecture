@@ -70,6 +70,7 @@ Após executar a aplicação com `docker compose up`, você pode acessar os prin
 | Serviço | Acesso | Notas |
 | :--- | :--- | :--- |
 | **API NestJS** | `http://localhost:3000` | Endpoint base da aplicação. |
+| **Swagger** | `http://localhost:3000/api` | Endpoint do swagger. |
 | **Prisma Studio** | `npx prisma studio` | Ferramenta visual para navegar e gerenciar os dados do banco. |
 
 ### 4. 💻 Execução Local (Apenas a API)
