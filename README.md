@@ -90,31 +90,24 @@ A organização principal das pastas reflete as responsabilidades de cada camada
 
 ### 🌳 Visualização da Hierarquia
 
-src/
+    src/
+    ├── common/ # 🛠️ Código reutilizável (Helpers, Decorators, Pipes, Filters, etc.)
+    │
+    ├── domain/ # 💡 CORE DA APLICAÇÃO: Entidades, DTOs e regras de negócio puras.
+    │
+    ├── infra/ # ⚙️ INFRAESTRUTURA: Implementações concretas de tecnologias
+    |   ├── database/prisma/ # Configuração do Prisma ORM e Cliente de Banco de Dados
+    |   ├── redis/ # Provider para o serviço de Cache/Broker (Redis)
+    |   └── health/ # Health Checks (Verificações de Liveness / Readiness)
+    │
+    └── modules/ # 📦 FEATURES: Agrupamento de funcionalidades por módulo (Ex: User)
+        └── [feature-name]/
+            ├── controllers/ # Camada de Interface (HTTP)
+            ├── repositories/ # Interfaces de Repositório e Implementações específicas
+            ├── services/ # Serviços e lógica específica da feature
+            └── use-cases/ # Commands, Queries e Handlers (Padrão CQRS)
 
-├── common/               # Código reutilizável (helpers, decorators, utils, pipes, filters, etc.)
-
-├── domain/               # Entidades, DTOs e regras de negócio puras
-
-├── infra/                # Implementações de infraestrutura
-
-│   ├── database/prisma/  # Configuração Prisma, client
-
-│   ├── redis/            # Provider Redis
-
-│   └── health/           # Health checks (liveness/readiness)
-
-└── modules/              # Módulos de features
-
-|   └── example/
-
-|       ├── controllers/  # Controllers HTTP
-
-|       ├── repositories/ # Interfaces + implementações
-
-|       ├── services/     # Serviços específicos da feature
-
-|       └── use-cases/    # Commands, Queries e Handlers (CQRS)
+---
 
 ## 🧩 Sobre Cada Camada
 
@@ -138,46 +131,68 @@ Cada camada do projeto possui uma responsabilidade clara, seguindo o princípio 
 #### **`modules/` (Módulos de Feature)**
 Agrupa toda a lógica de uma funcionalidade. É onde o **CQRS** é aplicado, orquestrando as operações de leitura e escrita através dos *Use Cases*.
 
-🗃️ Prisma ORM
-Criar migrações
-npx prisma migrate dev
+---
 
-Abrir Prisma Studio
-npx prisma studio
+## 🗃️ Prisma ORM & Banco de Dados
 
-⚡ Arquitetura CQRS
+O projeto utiliza o **Prisma** como Object-Relational Mapper (ORM), garantindo tipagem segura e uma experiência de desenvolvimento moderna para interagir com o **PostgreSQL**.
 
-O projeto já vem preparado com:
+### Comandos Essenciais
 
-Commands (operações de escrita)
+Com o banco de dados rodando (via Docker ou localmente), utilize o `npx prisma` para gerenciar o *schema* e os dados:
 
-Queries (operações de leitura)
+| Comando | Descrição |
+| :--- | :--- |
+| `npx prisma migrate dev` | **Criar/Aplicar Migrações:** Analisa o `schema.prisma`, gera uma nova migração e aplica as mudanças no banco de dados. |
+| `npx prisma studio` | **Abrir Prisma Studio:** Inicia a interface gráfica para visualizar, explorar e gerenciar os dados em tempo real.  |
+| `npx prisma generate` | **Gerar Cliente:** Gera o cliente Type-safe do Prisma após qualquer alteração no `schema.prisma`. |
 
-Handlers
+---
 
-Use Cases organizados por módulo
+## ⚡ Arquitetura CQRS (Command Query Responsibility Segregation)
 
-Exemplo de estrutura:
+O projeto adota o padrão **CQRS** para separar claramente as responsabilidades de leitura e escrita. Isso aumenta a escalabilidade, performance e manutenibilidade do código.
 
-modules/
-  user/
-    use-cases/
-      commands/
-        create-user.command.ts
-        create-user.handler.ts
-      queries/
-        find-user.query.ts
-        find-user.handler.ts
+Todo o fluxo de lógica de negócio é implementado através de *Use Cases* organizados por módulo.
 
-🧰 Health Checks
+### Componentes Chave
 
-Endpoints padrão:
+| Componente | Responsabilidade | Tipo de Operação |
+| :--- | :--- | :--- |
+| **Commands** | Solicitações que alteram o estado da aplicação. | **Escrita** (Criação, Atualização, Exclusão). |
+| **Queries** | Solicitações que apenas leem e recuperam dados. | **Leitura** (Busca por ID, Listagem). |
+| **Handlers** | Classes que contêm a lógica de negócio e executam um *Command* ou *Query* específico. | Execução da Lógica. |
+| **Use Cases** | Agrupamento de *Commands*, *Queries* e *Handlers* dentro de cada módulo. | Orquestração da Feature. |
 
-Liveness
-GET /health/liveness
+### Exemplo de Estrutura por Módulo
 
-Readiness
-GET /health/readiness
+A estrutura reflete a separação entre comandos e consultas dentro da pasta `use-cases/`:
 
+    modules/
+    └── user/
+        └── use-cases/
+            ├── commands/
+            |   ├── create-user.command.ts # A Requisição para Criar
+            |   └── create-user.handler.ts # A Lógica de Criação (Escrita)
+            └── queries/
+                ├── find-user.query.ts # A Requisição para Buscar
+                └── find-user.handler.ts # A Lógica de Busca (Leitura)
 
-Utilizados automaticamente no Docker.
+---
+
+## 🩺 Health Checks (Verificação de Saúde)
+
+O projeto inclui *endpoints* padronizados para verificação de saúde, essenciais para o monitoramento da aplicação em ambientes de produção e em orquestradores como Kubernetes.
+
+Estes *checks* garantem que a aplicação está não apenas rodando, mas também funcional e pronta para receber tráfego.
+
+### Endpoints Padrão
+
+| Health Check | Endpoint | Método | Função |
+| :--- | :--- | :--- | :--- |
+| **Liveness** | `/health/liveness` | `GET` | **Estado Vital:** Confirma se a aplicação está em execução. Se falhar, o contêiner deve ser reiniciado. |
+| **Readiness** | `/health/readiness` | `GET` | **Prontidão para Tráfego:** Confirma se todas as dependências críticas (DB, Redis) estão conectadas e prontas para uso. |
+
+Estes *checks* são utilizados automaticamente pelo **Docker Compose** durante seu processo de build, assegurando a alta disponibilidade.
+
+---
