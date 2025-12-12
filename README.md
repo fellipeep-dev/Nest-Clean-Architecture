@@ -91,27 +91,27 @@ A organização principal das pastas reflete as responsabilidades de cada camada
 ### 🌳 Visualização da Hierarquia
 
     src/
-    ├── common/ # 🛠️ Código reutilizável (Helpers, Decorators, Pipes, Filters, etc.)
+    ├── common/               # 🛠️ Código reutilizável (Helpers, Decorators, Pipes, Filters, etc.)
     │
-    ├── domain/ # 💡 CORE DA APLICAÇÃO: Entidades, DTOs e regras de negócio puras.
+    ├── domain/               # 💡 CORE DA APLICAÇÃO: Entidades, DTOs e regras de negócio puras.
     │
-    ├── infra/ # ⚙️ INFRAESTRUTURA: Implementações concretas de tecnologias
-    |   ├── database/prisma/ # Configuração do Prisma ORM e Cliente de Banco de Dados
-    |   ├── redis/ # Provider para o serviço de Cache/Broker (Redis)
-    |   └── health/ # Health Checks (Verificações de Liveness / Readiness)
+    ├── infra/                # ⚙️ INFRAESTRUTURA: Implementações concretas de tecnologias
+    |   ├── database/prisma/    # Configuração do Prisma ORM e Cliente de Banco de Dados
+    |   ├── redis/              # Provider para o serviço de Cache/Broker (Redis)
+    |   └── health/             # Health Checks (Verificações de Liveness / Readiness)
     │
-    └── modules/ # 📦 FEATURES: Agrupamento de funcionalidades por módulo (Ex: User)
+    └── modules/              # 📦 FEATURES: Agrupamento de funcionalidades por módulo (Ex: User)
         └── [feature-name]/
-            ├── controllers/ # Camada de Interface (HTTP)
-            ├── repositories/ # Interfaces de Repositório e Implementações específicas
-            ├── services/ # Serviços e lógica específica da feature
-            └── use-cases/ # Commands, Queries e Handlers (Padrão CQRS)
+            ├── controllers/    # Camada de Interface (HTTP)
+            ├── repositories/   # Interfaces de Repositório e Implementações específicas
+            ├── services/       # Serviços e lógica específica da feature
+            └── use-cases/      # Commands, Queries e Handlers (Padrão CQRS)
 
 ---
 
-## 🧩 Sobre Cada Camada
+### 🧩 Responsabilidades da Camada
 
-Cada camada do projeto possui uma responsabilidade clara, seguindo o princípio da **Inversão de Dependência** da Clean Architecture. 
+Cada camada possui uma responsabilidade clara, seguindo o princípio da **Inversão de Dependência** (IDP).
 
 | Camada | Responsabilidade | Conteúdo Principal | Dependências |
 | :--- | :--- | :--- | :--- |
@@ -119,17 +119,6 @@ Cada camada do projeto possui uma responsabilidade clara, seguindo o princípio 
 | **`domain/`** | **Regras de Negócio Puras.** O Core da Aplicação. | Entidades e DTOs que representam o estado e as regras do domínio. | Nenhuma dependência externa. |
 | **`infra/`** | Implementações concretas de tecnologias. | **Prisma Client**, **Redis Provider**, **Health Checks** e implementação da Persistência de Dados. | Depende das tecnologias externas. |
 | **`modules/`** | Funcionalidades Específicas (Features). | Contém o ciclo completo de uma feature, incluindo **Controller**, **Repository**, **Service** e **Use Cases (CQRS)**. | Depende de `domain/` e `infra/`. |
-
-### Detalhamento das Camadas
-
-#### **`domain/` (Domínio)**
-É o centro da aplicação. Contém a **lógica pura** de negócio, livre de qualquer implementação tecnológica (como banco de dados ou framework).
-
-#### **`infra/` (Infraestrutura)**
-É a camada mais externa. Responsável por traduzir as interfaces definidas no domínio para implementações concretas (ex: como salvar uma Entidade usando o Prisma).
-
-#### **`modules/` (Módulos de Feature)**
-Agrupa toda a lógica de uma funcionalidade. É onde o **CQRS** é aplicado, orquestrando as operações de leitura e escrita através dos *Use Cases*.
 
 ---
 
@@ -172,11 +161,11 @@ A estrutura reflete a separação entre comandos e consultas dentro da pasta `us
     └── user/
         └── use-cases/
             ├── commands/
-            |   ├── create-user.command.ts # A Requisição para Criar
-            |   └── create-user.handler.ts # A Lógica de Criação (Escrita)
+            |   ├── create-user.command.ts  # A Requisição para Criar
+            |   └── create-user.handler.ts  # A Lógica de Criação (Escrita)
             └── queries/
-                ├── find-user.query.ts # A Requisição para Buscar
-                └── find-user.handler.ts # A Lógica de Busca (Leitura)
+                ├── find-user.query.ts      # A Requisição para Buscar
+                └── find-user.handler.ts    # A Lógica de Busca (Leitura)
 
 ---
 
@@ -196,3 +185,17 @@ Estes *checks* garantem que a aplicação está não apenas rodando, mas também
 Estes *checks* são utilizados automaticamente pelo **Docker Compose** durante seu processo de build, assegurando a alta disponibilidade.
 
 ---
+
+## 🚀 Conclusão e Próximos Passos
+
+Este template fornece a base arquitetural completa e robusta para qualquer projeto NestJS que exija escalabilidade e manutenibilidade a longo prazo.
+
+Sinta-se à vontade para:
+
+* **Utilizar:** Clone este repositório para iniciar sua próxima API.
+* **Contribuir:** Sugestões e Pull Requests são bem-vindas para aprimorar ainda mais esta base.
+* **Aprender:** Use a estrutura para estudar e aplicar padrões de Clean Architecture e CQRS.
+
+---
+
+Feito com muito ☕ e dedicação por **[Fellipeep-dev](https://github.com/fellipeep-dev)**.
