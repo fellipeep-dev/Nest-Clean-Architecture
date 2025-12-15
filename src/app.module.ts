@@ -5,6 +5,7 @@ import { UserModule } from './modules/user/user.module';
 import { CqrsModule } from '@nestjs/cqrs';
 import { HealthModule } from './infra/health/health.module';
 import { RedisModule } from './infra/redis/redis.module';
+import { EventModule } from './common/events/event.module';
 
 @Module({
   imports: [
@@ -14,8 +15,9 @@ import { RedisModule } from './infra/redis/redis.module';
     CqrsModule.forRoot(),
     PrismaModule,
     RedisModule,
-    UserModule,
     HealthModule,
+    EventModule,
+    UserModule,
   ],
 })
 export class AppModule {}

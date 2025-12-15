@@ -14,7 +14,7 @@ export class FindUserByEmailHandler implements IQueryHandler<FindUserByEmailQuer
   ) {}
 
   async execute(query: FindUserByEmailQuery): Promise<UserEntity | null> {
-    const cacheKey = CacheKeys.USERS.FIND_BY_EMAIL(query.email);
+    const cacheKey = CacheKeys.USERS.FIND_BY_IDENTIFIER('email', query.email);
 
     const cached = await this.cache.get<UserEntity>(cacheKey);
     if (cached) return cached;
