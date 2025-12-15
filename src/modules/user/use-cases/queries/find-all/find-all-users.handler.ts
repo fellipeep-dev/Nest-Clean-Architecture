@@ -23,7 +23,7 @@ export class FindAllUsersHandler implements IQueryHandler<FindAllUsersQuery> {
     const cacheKey = generateCacheKey(CacheKeys.USERS.FIND_ALL, data, version);
 
     const cached = await this.cache.get<UserEntity[]>(cacheKey);
-    if (cached) return cached;
+    if (cached !== undefined) return cached;
 
     const query = new QueryBuilder(data).build();
     const users = await this.userRepository.findAll(query);

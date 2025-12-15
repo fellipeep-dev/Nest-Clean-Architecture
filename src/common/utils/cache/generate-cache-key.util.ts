@@ -11,7 +11,7 @@ export function generateCacheKey(
 
   const hash = crypto.createHash('sha256').update(payload).digest('hex');
 
-  const versionPart = version !== undefined ? `:v${version}` : 1;
+  const versionPart = version !== undefined ? `:v${version}` : '';
 
   return `${prefix}${versionPart}:${hash}`;
 }

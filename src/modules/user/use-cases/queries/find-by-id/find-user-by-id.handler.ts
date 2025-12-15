@@ -17,7 +17,7 @@ export class FindUserByIdHandler implements IQueryHandler<FindUserByIdQuery> {
     const cacheKey = CacheKeys.USERS.FIND_BY_ID(query.id);
 
     const cached = await this.cache.get<UserEntity>(cacheKey);
-    if (cached) return cached;
+    if (cached !== undefined) return cached;
 
     const user = await this.userRepository.findById(query.id);
 

@@ -14,7 +14,7 @@ export class EntityCacheInvalidationHandler implements IEventHandler<EntityChang
     const config = CacheKeys[entity];
     if (!config) return;
 
-    await this.cache.set(`${config.FIND_ALL}:version`, Date.now());
+    await this.cache.set(config.FIND_ALL_VERSION, Date.now());
 
     if (id && config.FIND_BY_ID) await this.cache.del(config.FIND_BY_ID(id));
 

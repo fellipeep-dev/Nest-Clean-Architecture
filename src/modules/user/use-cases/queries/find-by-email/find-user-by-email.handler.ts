@@ -17,7 +17,7 @@ export class FindUserByEmailHandler implements IQueryHandler<FindUserByEmailQuer
     const cacheKey = CacheKeys.USERS.FIND_BY_IDENTIFIER('email', query.email);
 
     const cached = await this.cache.get<UserEntity>(cacheKey);
-    if (cached) return cached;
+    if (cached !== undefined) return cached;
 
     const user = await this.userRepository.findByEmail(query.email);
 
