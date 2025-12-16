@@ -56,16 +56,13 @@ export abstract class RepositoryFactory<
     });
   }
 
-  update(updateDto: U): Promise<E> {
-    const { id, ...updateInput } = updateDto as any;
-
+  update(id: string, updateDto: U): Promise<E> {
     return (this.prismaService as any)[this.model].update({
       where: {
         id,
       },
       data: {
-        ...updateInput,
-        updatedAt: new Date(),
+        ...updateDto,
       },
     });
   }
@@ -77,7 +74,6 @@ export abstract class RepositoryFactory<
       },
       data: {
         deletedAt: new Date(),
-        updatedAt: new Date(),
       },
     });
   }

@@ -19,9 +19,7 @@ export class UpdateUserHandler implements ICommandHandler<UpdateUserCommand> {
 
     if (data.email) await this.userValidationService.isEmailUnique(data.email);
 
-    const user = await this.userRepository.update({
-      ...data,
-    });
+    const user = await this.userRepository.update(id, data);
 
     this.eventBus.publish(
       new EntityChangedEvent({
