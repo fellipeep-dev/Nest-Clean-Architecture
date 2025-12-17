@@ -1,7 +1,7 @@
+import { UpdateCommand } from '@abstractions';
 import { UpdateUserDto } from '@dtos';
-import { Command } from '@nestjs/cqrs';
 
-export class UpdateUserCommand extends Command<void> {
+export class UpdateUserCommand extends UpdateCommand<UpdateUserDto> {
   constructor(
     public readonly id: string,
     public readonly data: UpdateUserDto,

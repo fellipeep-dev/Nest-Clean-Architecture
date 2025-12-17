@@ -7,11 +7,10 @@ import { CacheEntity } from 'src/domain/types';
 
 export abstract class CreateHandler<
   TEntity extends BaseEntity,
-  TCommand extends CreateCommand<any>,
-  TRepository extends RepositoryFactory<TEntity>,
+  TCommand extends CreateCommand<object>,
 > {
   constructor(
-    protected readonly repository: TRepository,
+    protected readonly repository: RepositoryFactory<TEntity>,
     protected readonly eventBus: EventBus,
     protected readonly cacheEntity: CacheEntity,
   ) {}

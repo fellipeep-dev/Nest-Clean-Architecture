@@ -1,6 +1,8 @@
-import { ICommand } from '@nestjs/cqrs';
+import { Command } from '@nestjs/cqrs';
 
-export interface UpdateCommand<TUpdateDto> extends ICommand {
+export abstract class UpdateCommand<
+  TUpdateDto extends object,
+> extends Command<void> {
   id: string;
   data: TUpdateDto;
 }

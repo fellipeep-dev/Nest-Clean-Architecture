@@ -4,21 +4,23 @@ import { RepositoryFactory } from '../../repositories';
 import { DeleteCommand } from './delete.command';
 import { EntityChangedEvent } from 'src/common/events/entity-changed/entity-changed.event';
 import { CacheEntity } from 'src/domain/types';
+import { IValidationService } from '../../services/ivalidation.service';
 
 export abstract class DeleteHandler<
   TEntity extends BaseEntity,
   TCommand extends DeleteCommand,
-  TRepository extends RepositoryFactory<TEntity>,
 > {
   constructor(
-    protected readonly repository: TRepository,
+    protected readonly repository: RepositoryFactory<TEntity>,
+    protected readonly validationService: IValidationService,
     protected readonly eventBus: EventBus,
     protected readonly cacheEntity: CacheEntity,
-    protected readonly identifiers?: Record<string, any>,
   ) {}
 
   async execute(command: TCommand): Promise<void> {
     const { id } = command;
+
+    await this.validationService.doesExist(id);
 
     await this.repository.softDelete(id);
 
@@ -27,7 +29,6 @@ export abstract class DeleteHandler<
         entity: this.cacheEntity,
         action: 'delete',
         id,
-        identifiers: this.identifiers,
       }),
     );
   }

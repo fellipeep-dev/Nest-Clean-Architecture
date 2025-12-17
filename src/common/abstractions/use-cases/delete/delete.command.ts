@@ -1,5 +1,5 @@
-import { ICommand } from '@nestjs/cqrs';
+import { Command } from '@nestjs/cqrs';
 
-export interface DeleteCommand extends ICommand {
+export abstract class DeleteCommand extends Command<void> {
   id: string;
 }

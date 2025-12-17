@@ -1,6 +1,6 @@
-import { Command } from '@nestjs/cqrs';
+import { DeleteCommand } from '@abstractions';
 
-export class DeleteUserCommand extends Command<void> {
+export class DeleteUserCommand extends DeleteCommand {
   constructor(public readonly id: string) {
     super();
   }

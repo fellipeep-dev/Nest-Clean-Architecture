@@ -6,13 +6,12 @@ import { Inject } from '@nestjs/common';
 import type { CacheEntity } from 'src/domain/types';
 import { CacheKeys } from '@utils';
 
-export abstract class FindById<
+export abstract class FindByIdHandler<
   TEntity extends BaseEntity,
-  TQuery extends FindByIdQuery,
-  TRepository extends RepositoryFactory<TEntity>,
+  TQuery extends FindByIdQuery<TEntity>,
 > {
   constructor(
-    protected readonly repository: TRepository,
+    protected readonly repository: RepositoryFactory<TEntity>,
     @Inject(CACHE_MANAGER) protected readonly cache: Cache,
     protected readonly cacheEntity: CacheEntity,
   ) {}

@@ -1,5 +1,8 @@
-import { IQuery } from '@nestjs/cqrs';
+import { Query } from '@nestjs/cqrs';
+import { BaseEntity } from '../../entities';
 
-export interface FindByIdQuery extends IQuery {
+export abstract class FindByIdQuery<
+  TEntity extends BaseEntity,
+> extends Query<TEntity | null> {
   id: string;
 }

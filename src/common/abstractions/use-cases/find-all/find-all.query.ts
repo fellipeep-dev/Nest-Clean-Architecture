@@ -1,6 +1,9 @@
 import { QueryParamsDto } from '@dtos';
-import { IQuery } from '@nestjs/cqrs';
+import { Query } from '@nestjs/cqrs';
+import { BaseEntity } from '../../entities';
 
-export interface FindAllQuery extends IQuery {
+export abstract class FindAllQuery<TEntity extends BaseEntity> extends Query<
+  TEntity[]
+> {
   data: QueryParamsDto;
 }

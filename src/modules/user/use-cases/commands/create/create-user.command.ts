@@ -1,7 +1,7 @@
+import { CreateCommand } from '@abstractions';
 import { CreateUserDto } from '@dtos';
-import { Command } from '@nestjs/cqrs';
 
-export class CreateUserCommand extends Command<{ actionId: string }> {
+export class CreateUserCommand extends CreateCommand<CreateUserDto> {
   constructor(public readonly data: CreateUserDto) {
     super();
   }

@@ -1,7 +1,7 @@
+import { FindByIdQuery } from '@abstractions';
 import { UserEntity } from '@entities';
-import { Query } from '@nestjs/cqrs';
 
-export class FindUserByIdQuery extends Query<UserEntity | null> {
+export class FindUserByIdQuery extends FindByIdQuery<UserEntity> {
   constructor(public readonly id: string) {
     super();
   }

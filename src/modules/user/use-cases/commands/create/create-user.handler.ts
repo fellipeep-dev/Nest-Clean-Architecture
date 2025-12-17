@@ -8,8 +8,8 @@ import { EntityChangedEvent } from 'src/common/events/entity-changed/entity-chan
 @CommandHandler(CreateUserCommand)
 export class CreateUserHandler implements ICommandHandler<CreateUserCommand> {
   constructor(
-    protected readonly userRepository: IUserRepository,
-    protected readonly eventBus: EventBus,
+    private readonly userRepository: IUserRepository,
+    private readonly eventBus: EventBus,
     private readonly userValidationService: IUserValidationService,
   ) {}
 

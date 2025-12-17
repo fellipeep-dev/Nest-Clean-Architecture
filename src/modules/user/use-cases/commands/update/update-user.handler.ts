@@ -15,7 +15,7 @@ export class UpdateUserHandler implements ICommandHandler<UpdateUserCommand> {
   async execute(command: UpdateUserCommand): Promise<void> {
     const { id, data } = command;
 
-    await this.userValidationService.doesUserExist(id);
+    await this.userValidationService.doesExist(id);
 
     if (data.email) await this.userValidationService.isEmailUnique(data.email);
 

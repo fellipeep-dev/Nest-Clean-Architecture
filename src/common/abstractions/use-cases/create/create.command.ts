@@ -1,5 +1,7 @@
-import { ICommand } from '@nestjs/cqrs';
+import { Command } from '@nestjs/cqrs';
 
-export interface CreateCommand<TCreateDto> extends ICommand {
+export abstract class CreateCommand<TCreateDto extends object> extends Command<{
+  actionId: string;
+}> {
   data: TCreateDto;
 }

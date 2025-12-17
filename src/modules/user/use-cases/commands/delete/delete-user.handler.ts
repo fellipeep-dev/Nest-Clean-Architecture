@@ -15,7 +15,7 @@ export class DeleteUserHandler implements ICommandHandler<DeleteUserCommand> {
   async execute(command: DeleteUserCommand): Promise<void> {
     const { id } = command;
 
-    await this.userValidationService.doesUserExist(id);
+    await this.userValidationService.doesExist(id);
 
     const user = await this.userRepository.softDelete(id);
 

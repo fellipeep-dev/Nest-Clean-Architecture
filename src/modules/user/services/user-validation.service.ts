@@ -4,10 +4,8 @@ import { IUserValidationService } from './iuser-validation.service';
 import { AppError } from '@errors';
 
 @Injectable()
-export class UserValidationService extends IUserValidationService {
-  constructor(private readonly userRepository: IUserRepository) {
-    super();
-  }
+export class UserValidationService implements IUserValidationService {
+  constructor(private readonly userRepository: IUserRepository) {}
 
   async isEmailUnique(email: string): Promise<void> {
     const exists = await this.userRepository.findByEmail(email);
@@ -20,7 +18,7 @@ export class UserValidationService extends IUserValidationService {
       );
   }
 
-  async doesUserExist(id: string): Promise<void> {
+  async doesExist(id: string): Promise<void> {
     const exists = await this.userRepository.findById(id);
 
     if (!exists)

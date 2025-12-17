@@ -8,11 +8,10 @@ import type { CacheEntity } from 'src/domain/types';
 
 export abstract class FindAllHandler<
   TEntity extends BaseEntity,
-  TQuery extends FindAllQuery,
-  TRepository extends RepositoryFactory<TEntity>,
+  TQuery extends FindAllQuery<TEntity>,
 > {
   constructor(
-    protected readonly repository: TRepository,
+    protected readonly repository: RepositoryFactory<TEntity>,
     @Inject(CACHE_MANAGER) protected readonly cache: Cache,
     protected readonly cacheEntity: CacheEntity,
   ) {}

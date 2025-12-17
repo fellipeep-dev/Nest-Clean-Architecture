@@ -1,8 +1,8 @@
+import { FindAllQuery } from '@abstractions';
 import { QueryParamsDto } from '@dtos';
 import { UserEntity } from '@entities';
-import { Query } from '@nestjs/cqrs';
 
-export class FindAllUsersQuery extends Query<UserEntity[]> {
+export class FindAllUsersQuery extends FindAllQuery<UserEntity> {
   constructor(public readonly data: QueryParamsDto) {
     super();
   }
