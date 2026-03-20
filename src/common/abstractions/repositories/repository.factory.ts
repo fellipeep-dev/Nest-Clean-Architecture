@@ -1,7 +1,7 @@
 import { Inject } from '@nestjs/common';
 import { PrismaService } from 'src/infra/database/prisma/prisma.service';
 import { AuditableEntity, BaseEntity } from '../entities';
-import { QueryBuilderEntity } from '@entities';
+import { QueryBuilderEntity } from 'src/domain/entities';
 
 export abstract class RepositoryFactory<
   E extends object = BaseEntity | AuditableEntity,

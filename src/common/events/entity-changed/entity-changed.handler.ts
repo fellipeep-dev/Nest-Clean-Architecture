@@ -2,7 +2,7 @@ import { EventsHandler, IEventHandler } from '@nestjs/cqrs';
 import { EntityChangedEvent } from './entity-changed.event';
 import { Inject } from '@nestjs/common';
 import { Cache, CACHE_MANAGER } from '@nestjs/cache-manager';
-import { CacheKeys } from '@utils';
+import { CacheKeys } from 'src/common/utils';
 
 @EventsHandler(EntityChangedEvent)
 export class EntityCacheInvalidationHandler implements IEventHandler<EntityChangedEvent> {

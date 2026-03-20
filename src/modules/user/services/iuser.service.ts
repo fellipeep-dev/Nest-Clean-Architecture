@@ -1,5 +1,5 @@
-import { CreateUserDto, QueryParamsDto, UpdateUserDto } from '@dtos';
-import { UserEntity } from '@entities';
+import { CreateUserDto, QueryParamsDto, UpdateUserDto } from 'src/domain/dtos';
+import { UserEntity } from 'src/domain/entities';
 
 export abstract class IUserService {
   abstract CreateUser(

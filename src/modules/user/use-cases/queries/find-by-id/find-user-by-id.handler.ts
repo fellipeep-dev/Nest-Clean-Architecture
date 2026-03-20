@@ -3,8 +3,8 @@ import { IUserRepository } from 'src/modules/user/repositories/iuser.repository'
 import { FindUserByIdQuery } from './find-user-by-id.query';
 import { Inject } from '@nestjs/common';
 import { Cache, CACHE_MANAGER } from '@nestjs/cache-manager';
-import { UserEntity } from '@entities';
-import { FindByIdHandler } from '@abstractions';
+import { UserEntity } from 'src/domain/entities';
+import { FindByIdHandler } from 'src/common/abstractions';
 
 @QueryHandler(FindUserByIdQuery)
 export class FindUserByIdHandler

@@ -1,4 +1,4 @@
-import { UserEntity } from '@entities';
+import { UserEntity } from 'src/domain/entities';
 import { Query } from '@nestjs/cqrs';
 
 export class FindUserByEmailQuery extends Query<UserEntity | null> {

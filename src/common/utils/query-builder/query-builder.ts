@@ -1,4 +1,4 @@
-import { QueryBuilderEntity } from '@entities';
+import { QueryBuilderEntity } from 'src/domain/entities';
 import { QueryParamsDto } from 'src/domain/dtos/query-builder/query-params.dto';
 
 export class QueryBuilder {

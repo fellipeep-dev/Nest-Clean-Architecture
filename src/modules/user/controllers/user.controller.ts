@@ -9,8 +9,8 @@ import {
   Query,
 } from '@nestjs/common';
 import { IUserService } from '../services/iuser.service';
-import { CreateUserDto, QueryParamsDto, UpdateUserDto } from '@dtos';
-import { QueryConditionsPipe } from '@pipes';
+import { CreateUserDto, QueryParamsDto, UpdateUserDto } from 'src/domain/dtos';
+import { QueryConditionsPipe } from 'src/common/pipes';
 
 @Controller('user')
 export class UserController {

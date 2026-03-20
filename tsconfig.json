@@ -10,29 +10,6 @@
     "experimentalDecorators": true,
     "allowSyntheticDefaultImports": true,
     "target": "ES2023",
-    "paths": {
-      "@abstractions": [
-        "src/common/abstractions"
-      ],
-      "@errors": [
-        "src/common/errors"
-      ],
-      "@filters": [
-        "src/common/filters"
-      ],
-      "@pipes": [
-        "src/common/pipes"
-      ],
-      "@utils": [
-        "src/common/utils"
-      ],
-      "@entities": [
-        "src/domain/entities"
-      ],
-      "@dtos": [
-        "src/domain/dtos"
-      ]
-    },
     "sourceMap": true,
     "outDir": "./dist",
     "baseUrl": "./",

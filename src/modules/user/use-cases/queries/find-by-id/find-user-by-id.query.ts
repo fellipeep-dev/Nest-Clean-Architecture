@@ -1,5 +1,5 @@
-import { FindByIdQuery } from '@abstractions';
-import { UserEntity } from '@entities';
+import { FindByIdQuery } from 'src/common/abstractions';
+import { UserEntity } from 'src/domain/entities';
 
 export class FindUserByIdQuery extends FindByIdQuery<UserEntity> {
   constructor(public readonly id: string) {

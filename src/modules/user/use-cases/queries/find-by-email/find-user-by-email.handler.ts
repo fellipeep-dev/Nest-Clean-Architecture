@@ -1,8 +1,8 @@
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import { IUserRepository } from 'src/modules/user/repositories/iuser.repository';
 import { FindUserByEmailQuery } from './find-user-by-email.query';
-import { UserEntity } from '@entities';
-import { CacheKeys } from '@utils';
+import { UserEntity } from 'src/domain/entities';
+import { CacheKeys } from 'src/common/utils';
 import { Inject } from '@nestjs/common';
 import { Cache, CACHE_MANAGER } from '@nestjs/cache-manager';
 

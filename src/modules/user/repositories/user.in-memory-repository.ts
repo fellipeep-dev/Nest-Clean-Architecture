@@ -1,5 +1,5 @@
-import { CreateUserDto, UpdateUserDto } from '@dtos';
-import { UserEntity } from '@entities';
+import { CreateUserDto, UpdateUserDto } from 'src/domain/dtos';
+import { UserEntity } from 'src/domain/entities';
 import { IUserRepository } from './iuser.repository';
 
 export class UserInMemoryRepository extends IUserRepository {

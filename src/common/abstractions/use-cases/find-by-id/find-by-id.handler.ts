@@ -4,7 +4,7 @@ import { RepositoryFactory } from '../../repositories';
 import { FindByIdQuery } from './find-by-id.query';
 import { Inject } from '@nestjs/common';
 import type { CacheEntity } from 'src/domain/types';
-import { CacheKeys } from '@utils';
+import { CacheKeys } from 'src/common/utils';
 
 export abstract class FindByIdHandler<
   TEntity extends BaseEntity,

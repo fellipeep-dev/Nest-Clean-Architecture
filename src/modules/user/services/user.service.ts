@@ -1,4 +1,4 @@
-import { CreateUserDto, QueryParamsDto, UpdateUserDto } from '@dtos';
+import { CreateUserDto, QueryParamsDto, UpdateUserDto } from 'src/domain/dtos';
 import { Injectable } from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { CreateUserCommand } from '../use-cases/commands/create/create-user.command';
@@ -8,7 +8,7 @@ import { DeleteUserCommand } from '../use-cases/commands/delete/delete-user.comm
 import { UpdateUserCommand } from '../use-cases/commands/update/update-user.command';
 import { FindUserByEmailQuery } from '../use-cases/queries/find-by-email/find-user-by-email.query';
 import { IUserService } from './iuser.service';
-import { UserEntity } from '@entities';
+import { UserEntity } from 'src/domain/entities';
 
 @Injectable()
 export class UserService implements IUserService {

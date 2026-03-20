@@ -1,6 +1,6 @@
-import { RepositoryFactory } from '@abstractions';
-import { CreateUserDto, UpdateUserDto } from '@dtos';
-import { UserEntity } from '@entities';
+import { RepositoryFactory } from 'src/common/abstractions';
+import { CreateUserDto, UpdateUserDto } from 'src/domain/dtos';
+import { UserEntity } from 'src/domain/entities';
 
 export abstract class IUserRepository extends RepositoryFactory<
   UserEntity,

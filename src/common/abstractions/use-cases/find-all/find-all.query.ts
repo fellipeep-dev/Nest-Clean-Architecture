@@ -1,4 +1,4 @@
-import { QueryParamsDto } from '@dtos';
+import { QueryParamsDto } from 'src/domain/dtos';
 import { Query } from '@nestjs/cqrs';
 import { BaseEntity } from '../../entities';
 

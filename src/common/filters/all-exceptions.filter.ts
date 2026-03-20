@@ -5,9 +5,9 @@ import {
   HttpException,
   HttpStatus,
 } from '@nestjs/common';
-import { AppError } from '@errors';
 import { Request, Response } from 'express';
 import { Prisma } from 'src/infra/database/prisma/generated/client';
+import { AppError } from '../errors';
 
 @Catch()
 export class AllExceptionsFilter implements ExceptionFilter {
