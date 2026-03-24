@@ -6,6 +6,7 @@ import { CreateUserDtoMock } from 'src/domain/mocks/user';
 import { CreateUserCommand } from './create-user.command';
 import { AppError } from 'src/common/errors';
 import { HttpStatus } from '@nestjs/common';
+import { hash } from 'src/common/utils';
 
 jest.mock('src/common/utils', () => ({
   hash: jest.fn().mockResolvedValue('hashed_password'),
@@ -33,7 +34,7 @@ describe('CreateUserHandler', () => {
     );
   });
 
-  it('given a unique email, when creating a user, then it should persist this user and publish an event', async () => {
+  it('given a unique email, when creating a user, then it should persist user, hash password and publish correct event', async () => {
     //Arrange
     const userCommand = new CreateUserCommand(CreateUserDtoMock);
 
@@ -43,36 +44,47 @@ describe('CreateUserHandler', () => {
 
     //Assert
     expect(user).toMatchObject({
-      ...user,
+      email: CreateUserDtoMock.email,
       password: 'hashed_password',
     });
 
-    expect(eventBus.publish).toHaveBeenCalled();
+    expect(hash).toHaveBeenCalledWith(CreateUserDtoMock.password);
+
+    expect(eventBus.publish).toHaveBeenCalledWith(
+      expect.objectContaining({
+        payload: {
+          entity: 'USERS',
+          action: 'create',
+        },
+      }),
+    );
+
+    expect(actionId).toBeDefined();
   });
 
-  it('given a non-unique email, when creating a user, then it should throw conflict exception', async () => {
+  it('given a non-unique email, when creating a user, then it should throw conflict exception and not publish event', async () => {
     //Arrange
-    const existingUserCommand = new CreateUserCommand(CreateUserDtoMock);
-    const { actionId } = await sut.execute(existingUserCommand);
-    const existingUser = await userRepository.findById(actionId);
+    const command = new CreateUserCommand(CreateUserDtoMock);
 
-    //Act
-    try {
-      await sut.execute(existingUserCommand);
-    } catch (error) {
-      //Assert
-      expect(error).toBeInstanceOf(AppError);
-      expect(error.status).toBe(HttpStatus.CONFLICT);
-      expect(error).toEqual(
-        expect.objectContaining({
-          message: 'Email already in use',
-          status: HttpStatus.CONFLICT,
-          errorCode: 'EMAIL_ALREADY_IN_USE',
-        }),
+    jest
+      .spyOn(userValidationService, 'isEmailUnique')
+      .mockRejectedValue(
+        new AppError(
+          'Email already in use',
+          HttpStatus.CONFLICT,
+          'EMAIL_ALREADY_IN_USE',
+        ),
       );
-    }
 
-    expect(await userRepository.findAll({})).toHaveLength(1);
-    expect((await userRepository.findAll({}))[0]).toEqual(existingUser);
+    //Act + Assert
+    await expect(sut.execute(command)).rejects.toMatchObject({
+      message: 'Email already in use',
+      status: HttpStatus.CONFLICT,
+      errorCode: 'EMAIL_ALREADY_IN_USE',
+    });
+
+    expect(await userRepository.findAll({})).toHaveLength(0);
+
+    expect(eventBus.publish).not.toHaveBeenCalled();
   });
 });

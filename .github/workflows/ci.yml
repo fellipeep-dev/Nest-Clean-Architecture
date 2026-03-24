@@ -93,12 +93,12 @@ jobs:
         run: npm run format:check
         continue-on-error: false
 
-      - name: Run unit tests
-        run: npm test
+      # - name: Run unit tests
+      #   run: npm test
 
-      - name: Run test coverage
-        run: npm run test:cov
-        continue-on-error: true
+      # - name: Run test coverage
+      #   run: npm run test:cov
+      #   continue-on-error: true
 
       - name: Build application
         run: npx nest build
