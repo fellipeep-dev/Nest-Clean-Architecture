@@ -12,7 +12,7 @@ export class UserValidationService implements IUserValidationService {
 
     if (exists)
       throw new AppError(
-        `Email ${exists.email} already in use`,
+        `Email already in use`,
         HttpStatus.CONFLICT,
         'EMAIL_ALREADY_IN_USE',
       );

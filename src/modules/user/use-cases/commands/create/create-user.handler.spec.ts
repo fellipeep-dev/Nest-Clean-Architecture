@@ -4,6 +4,8 @@ import { UserInMemoryRepository } from 'src/modules/user/repositories/user.in-me
 import { UserValidationService } from 'src/modules/user/services/user-validation.service';
 import { CreateUserDtoMock } from 'src/domain/mocks/user';
 import { CreateUserCommand } from './create-user.command';
+import { AppError } from 'src/common/errors';
+import { HttpStatus } from '@nestjs/common';
 
 jest.mock('src/common/utils', () => ({
   hash: jest.fn().mockResolvedValue('hashed_password'),
@@ -46,5 +48,31 @@ describe('CreateUserHandler', () => {
     });
 
     expect(eventBus.publish).toHaveBeenCalled();
+  });
+
+  it('given a non-unique email, when creating a user, then it should throw conflict exception', async () => {
+    //Arrange
+    const existingUserCommand = new CreateUserCommand(CreateUserDtoMock);
+    const { actionId } = await sut.execute(existingUserCommand);
+    const existingUser = await userRepository.findById(actionId);
+
+    //Act
+    try {
+      await sut.execute(existingUserCommand);
+    } catch (error) {
+      //Assert
+      expect(error).toBeInstanceOf(AppError);
+      expect(error.status).toBe(HttpStatus.CONFLICT);
+      expect(error).toEqual(
+        expect.objectContaining({
+          message: 'Email already in use',
+          status: HttpStatus.CONFLICT,
+          errorCode: 'EMAIL_ALREADY_IN_USE',
+        }),
+      );
+    }
+
+    expect(await userRepository.findAll({})).toHaveLength(1);
+    expect((await userRepository.findAll({}))[0]).toEqual(existingUser);
   });
 });
