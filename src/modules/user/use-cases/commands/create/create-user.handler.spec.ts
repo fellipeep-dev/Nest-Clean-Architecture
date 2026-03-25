@@ -2,7 +2,7 @@ import { IUserRepository } from 'src/modules/user/repositories/iuser.repository'
 import { CreateUserHandler } from './create-user.handler';
 import { UserInMemoryRepository } from 'src/modules/user/repositories/user.in-memory-repository';
 import { UserValidationService } from 'src/modules/user/services/user-validation.service';
-import { CreateUserDtoMock } from 'src/domain/mocks/user';
+import { createUserDtoMock } from 'src/domain/mocks/user';
 import { CreateUserCommand } from './create-user.command';
 import { AppError } from 'src/common/errors';
 import { HttpStatus } from '@nestjs/common';
@@ -36,7 +36,7 @@ describe('CreateUserHandler', () => {
 
   it('given a unique email, when creating a user, then it should persist user, hash password and publish correct event', async () => {
     //Arrange
-    const userCommand = new CreateUserCommand(CreateUserDtoMock);
+    const userCommand = new CreateUserCommand(createUserDtoMock);
 
     //Act
     const { actionId } = await sut.execute(userCommand);
@@ -44,11 +44,11 @@ describe('CreateUserHandler', () => {
 
     //Assert
     expect(user).toMatchObject({
-      email: CreateUserDtoMock.email,
+      email: createUserDtoMock.email,
       password: 'hashed_password',
     });
 
-    expect(hash).toHaveBeenCalledWith(CreateUserDtoMock.password);
+    expect(hash).toHaveBeenCalledWith(createUserDtoMock.password);
 
     expect(eventBus.publish).toHaveBeenCalledWith(
       expect.objectContaining({
@@ -64,7 +64,7 @@ describe('CreateUserHandler', () => {
 
   it('given a non-unique email, when creating a user, then it should throw conflict exception and not publish event', async () => {
     //Arrange
-    const command = new CreateUserCommand(CreateUserDtoMock);
+    const userCommand = new CreateUserCommand(createUserDtoMock);
 
     jest
       .spyOn(userValidationService, 'isEmailUnique')
@@ -77,7 +77,7 @@ describe('CreateUserHandler', () => {
       );
 
     //Act + Assert
-    await expect(sut.execute(command)).rejects.toMatchObject({
+    await expect(sut.execute(userCommand)).rejects.toMatchObject({
       message: 'Email already in use',
       status: HttpStatus.CONFLICT,
       errorCode: 'EMAIL_ALREADY_IN_USE',

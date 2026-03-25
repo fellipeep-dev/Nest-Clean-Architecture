@@ -7,11 +7,11 @@ export class UpdateUserDto {
   @IsString()
   name: string | null;
 
-  @ApiProperty({ required: false, nullable: true, default: 'string' })
+  @ApiProperty({ required: false, nullable: true })
   @IsOptional()
   @IsString()
   @IsEmail()
-  email: string | null;
+  email?: string | null;
 
   @ApiProperty({ required: false, nullable: true, default: null })
   @IsString()
