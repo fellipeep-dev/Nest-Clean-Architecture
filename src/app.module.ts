@@ -21,3 +21,5 @@ import { EventModule } from './common/events/event.module';
   ],
 })
 export class AppModule {}
+
+//Arrumar tsconfig

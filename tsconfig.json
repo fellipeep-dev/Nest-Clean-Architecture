@@ -12,6 +12,10 @@
     "target": "ES2023",
     "sourceMap": true,
     "outDir": "./dist",
+    "types": [
+      "jest"
+    ],
+    "ignoreDeprecations": "6.0",
     "baseUrl": "./",
     "incremental": true,
     "skipLibCheck": true,
