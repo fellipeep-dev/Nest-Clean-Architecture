@@ -1,5 +1,5 @@
 import { HttpStatus, Injectable } from '@nestjs/common';
-import { IUserRepository } from '../repositories/iuser.repository';
+import { IUserRepository } from '../../domain/repositories/iuser.repository';
 import { IUserValidationService } from './iuser-validation.service';
 import { AppError } from 'src/common/errors';
 

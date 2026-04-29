@@ -5,21 +5,21 @@ export class CreateUserDto {
   @ApiProperty()
   @IsNotEmpty()
   @IsString()
-  name: string;
+  name!: string;
 
   @ApiProperty()
   @IsNotEmpty()
   @IsString()
   @IsEmail()
-  email: string;
+  email!: string;
 
   @ApiProperty()
   @IsNotEmpty()
   @IsString()
-  password: string;
+  password!: string;
 
   @ApiProperty({ required: false, nullable: true, default: null })
   @IsString()
   @IsOptional()
-  profilePictureUrl: string | null;
+  profilePictureUrl!: string | null;
 }

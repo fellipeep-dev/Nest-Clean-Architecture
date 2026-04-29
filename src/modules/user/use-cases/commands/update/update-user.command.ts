@@ -1,5 +1,5 @@
 import { UpdateCommand } from 'src/common/abstractions';
-import { UpdateUserDto } from 'src/domain/dtos';
+import { UpdateUserDto } from 'src/modules/user/presentation/dtos/update-user.dto';
 
 export class UpdateUserCommand extends UpdateCommand<UpdateUserDto> {
   constructor(

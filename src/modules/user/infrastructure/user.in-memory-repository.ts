@@ -1,6 +1,7 @@
-import { CreateUserDto, UpdateUserDto } from 'src/domain/dtos';
-import { UserEntity } from 'src/domain/entities';
-import { IUserRepository } from './iuser.repository';
+import { CreateUserDto } from '../presentation/dtos/create-user.dto';
+import { UpdateUserDto } from '../presentation/dtos/update-user.dto';
+import { UserEntity } from '../domain/entities/user.entity';
+import { IUserRepository } from '../domain/repositories/iuser.repository';
 
 export class UserInMemoryRepository extends IUserRepository {
   public users: UserEntity[] = [];

@@ -1,11 +1,11 @@
-import { IUserRepository } from 'src/modules/user/repositories/iuser.repository';
-import { UserValidationService } from 'src/modules/user/services/user-validation.service';
-import { UserInMemoryRepository } from 'src/modules/user/repositories/user.in-memory-repository';
-import { createUserDtoMock } from 'src/domain/mocks/user';
+import { IUserRepository } from 'src/modules/user/domain/repositories/iuser.repository';
+import { UserValidationService } from 'src/modules/user/use-cases/services/user-validation.service';
+import { UserInMemoryRepository } from 'src/modules/user/infrastructure/user.in-memory-repository';
 import { DeleteUserCommand } from './delete-user.command';
 import { DeleteUserHandler } from './delete-user.handler';
 import { AppError } from 'src/common/errors';
 import { HttpStatus } from '@nestjs/common';
+import { createUserDtoMock } from 'src/modules/user/domain/mocks/create-user.dto.mock';
 
 describe('DeleteUserHandler', () => {
   let sut: DeleteUserHandler;

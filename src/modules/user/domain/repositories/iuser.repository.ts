@@ -1,6 +1,7 @@
 import { RepositoryFactory } from 'src/common/abstractions';
-import { CreateUserDto, UpdateUserDto } from 'src/domain/dtos';
-import { UserEntity } from 'src/domain/entities';
+import { UserEntity } from '../entities/user.entity';
+import { CreateUserDto } from '../../presentation/dtos/create-user.dto';
+import { UpdateUserDto } from '../../presentation/dtos/update-user.dto';
 
 export abstract class IUserRepository extends RepositoryFactory<
   UserEntity,

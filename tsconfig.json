@@ -15,7 +15,6 @@
     "types": [
       "jest"
     ],
-    "ignoreDeprecations": "6.0",
     "baseUrl": "./",
     "incremental": true,
     "skipLibCheck": true,

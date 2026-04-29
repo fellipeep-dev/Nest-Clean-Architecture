@@ -5,7 +5,7 @@ export class UpdateUserDto {
   @ApiProperty({ required: false, nullable: true, default: 'string' })
   @IsOptional()
   @IsString()
-  name: string | null;
+  name?: string | null;
 
   @ApiProperty({ required: false, nullable: true })
   @IsOptional()
@@ -16,5 +16,5 @@ export class UpdateUserDto {
   @ApiProperty({ required: false, nullable: true, default: null })
   @IsString()
   @IsOptional()
-  profilePictureUrl: string | null;
+  profilePictureUrl?: string | null;
 }

@@ -1,4 +1,4 @@
-import { UpdateUserDto } from 'src/domain/dtos';
+import { UpdateUserDto } from '../../presentation/dtos/update-user.dto';
 
 export const updateUserDtoMock: UpdateUserDto = {
   name: 'string',

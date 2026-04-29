@@ -1,8 +1,8 @@
 import { CommandHandler, EventBus, ICommandHandler } from '@nestjs/cqrs';
 import { CreateUserCommand } from './create-user.command';
-import { IUserRepository } from 'src/modules/user/repositories/iuser.repository';
+import { IUserRepository } from 'src/modules/user/domain/repositories/iuser.repository';
 import { hash } from 'src/common/utils';
-import { IUserValidationService } from 'src/modules/user/services/iuser-validation.service';
+import { IUserValidationService } from 'src/modules/user/use-cases/services/iuser-validation.service';
 import { EntityChangedEvent } from 'src/common/events/entity-changed/entity-changed.event';
 
 @CommandHandler(CreateUserCommand)

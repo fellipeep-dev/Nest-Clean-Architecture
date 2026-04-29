@@ -1,10 +1,10 @@
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
-import { IUserRepository } from 'src/modules/user/repositories/iuser.repository';
+import { IUserRepository } from 'src/modules/user/domain/repositories/iuser.repository';
 import { FindUserByIdQuery } from './find-user-by-id.query';
 import { Inject } from '@nestjs/common';
 import { Cache, CACHE_MANAGER } from '@nestjs/cache-manager';
-import { UserEntity } from 'src/domain/entities';
 import { FindByIdHandler } from 'src/common/abstractions';
+import { UserEntity } from 'src/modules/user/domain/entities/user.entity';
 
 @QueryHandler(FindUserByIdQuery)
 export class FindUserByIdHandler
