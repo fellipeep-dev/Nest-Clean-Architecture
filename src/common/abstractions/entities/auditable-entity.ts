@@ -1,5 +1,5 @@
 export abstract class AuditableEntity {
-  createdAt: Date;
-  updatedAt: Date;
-  deletedAt: Date | null;
+  createdAt!: Date;
+  updatedAt!: Date;
+  deletedAt!: Date | null;
 }
