@@ -1,7 +1,7 @@
 import { HttpStatus, Injectable } from '@nestjs/common';
 import { IUserRepository } from '../../domain/repositories/iuser.repository';
 import { IUserValidationService } from './iuser-validation.service';
-import { AppError } from 'src/common/errors';
+import { AppError } from 'src/shared/errors';
 
 @Injectable()
 export class UserValidationService implements IUserValidationService {

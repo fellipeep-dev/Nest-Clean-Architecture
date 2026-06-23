@@ -4,7 +4,7 @@ import { UserValidationService } from 'src/modules/user/use-cases/services/user-
 import { UserInMemoryRepository } from 'src/modules/user/infrastructure/user.in-memory-repository';
 import { UpdateUserCommand } from './update-user.command';
 import { updateUserDtoMock } from 'src/modules/user/domain/mocks/update-user.dto.mock';
-import { AppError } from 'src/common/errors';
+import { AppError } from 'src/shared/errors';
 import { HttpStatus } from '@nestjs/common';
 import { createUserDtoMock } from 'src/modules/user/domain/mocks/create-user.dto.mock';
 

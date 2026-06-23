@@ -1,4 +1,4 @@
-import { IValidationService } from 'src/common/abstractions/services/ivalidation.service';
+import { IValidationService } from 'src/shared/kernel/services/ivalidation.service';
 
 export abstract class IUserValidationService extends IValidationService {
   abstract isEmailUnique(email: string): Promise<void>;

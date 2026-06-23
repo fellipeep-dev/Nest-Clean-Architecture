@@ -8,8 +8,8 @@ import {
   Put,
   Query,
 } from '@nestjs/common';
-import { QueryParamsDto } from 'src/domain/dtos';
-import { QueryConditionsPipe } from 'src/common/pipes';
+import { QueryParamsDto } from 'src/shared-presentation/dtos';
+import { QueryConditionsPipe } from 'src/shared/pipes';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { CreateUserCommand } from '../../use-cases/commands/create/create-user.command';
 import { FindAllUsersQuery } from '../../use-cases/queries/find-all/find-all-users.query';

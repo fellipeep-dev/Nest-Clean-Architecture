@@ -3,12 +3,12 @@ import { CreateUserHandler } from './create-user.handler';
 import { UserInMemoryRepository } from 'src/modules/user/infrastructure/user.in-memory-repository';
 import { UserValidationService } from 'src/modules/user/use-cases/services/user-validation.service';
 import { CreateUserCommand } from './create-user.command';
-import { AppError } from 'src/common/errors';
+import { AppError } from 'src/shared/errors';
 import { HttpStatus } from '@nestjs/common';
-import { hash } from 'src/common/utils';
+import { hash } from 'src/shared/utils';
 import { createUserDtoMock } from 'src/modules/user/domain/mocks/create-user.dto.mock';
 
-jest.mock('src/common/utils', () => ({
+jest.mock('src/shared/utils', () => ({
   hash: jest.fn().mockResolvedValue('hashed_password'),
 }));
 

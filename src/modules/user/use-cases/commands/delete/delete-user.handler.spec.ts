@@ -3,7 +3,7 @@ import { UserValidationService } from 'src/modules/user/use-cases/services/user-
 import { UserInMemoryRepository } from 'src/modules/user/infrastructure/user.in-memory-repository';
 import { DeleteUserCommand } from './delete-user.command';
 import { DeleteUserHandler } from './delete-user.handler';
-import { AppError } from 'src/common/errors';
+import { AppError } from 'src/shared/errors';
 import { HttpStatus } from '@nestjs/common';
 import { createUserDtoMock } from 'src/modules/user/domain/mocks/create-user.dto.mock';
 

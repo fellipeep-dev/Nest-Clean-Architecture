@@ -3,8 +3,9 @@ import { IUserRepository } from 'src/modules/user/domain/repositories/iuser.repo
 import { FindUserByIdQuery } from './find-user-by-id.query';
 import { Inject } from '@nestjs/common';
 import { Cache, CACHE_MANAGER } from '@nestjs/cache-manager';
-import { FindByIdHandler } from 'src/common/abstractions';
+import { FindByIdHandler } from 'src/shared/abstractions';
 import { UserEntity } from 'src/modules/user/domain/entities/user.entity';
+import { CacheEntity } from 'src/shared/events/entity-changed/entity-changed.types';
 
 @QueryHandler(FindUserByIdQuery)
 export class FindUserByIdHandler
@@ -15,6 +16,6 @@ export class FindUserByIdHandler
     protected readonly userRepository: IUserRepository,
     @Inject(CACHE_MANAGER) protected readonly cache: Cache,
   ) {
-    super(userRepository, cache, 'USERS');
+    super(userRepository, cache, CacheEntity.USERS);
   }
 }

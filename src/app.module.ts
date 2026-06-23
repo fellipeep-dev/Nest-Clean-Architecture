@@ -1,11 +1,11 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-import { PrismaModule } from './infra/database/prisma/prisma.module';
+import { PrismaModule } from './infrastructure/database/prisma/prisma.module';
 import { UserModule } from './modules/user/user.module';
 import { CqrsModule } from '@nestjs/cqrs';
-import { HealthModule } from './infra/health/health.module';
-import { RedisModule } from './infra/redis/redis.module';
-import { EventModule } from './common/events/event.module';
+import { HealthModule } from './infrastructure/health/health.module';
+import { RedisModule } from './infrastructure/redis/redis.module';
+import { EventModule } from './shared/events/event.module';
 
 @Module({
   imports: [
@@ -23,3 +23,4 @@ import { EventModule } from './common/events/event.module';
 export class AppModule {}
 
 //Arrumar tsconfig
+//Arrumar Cache

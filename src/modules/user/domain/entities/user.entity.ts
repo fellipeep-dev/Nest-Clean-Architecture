@@ -1,5 +1,5 @@
-import { BaseEntity } from 'src/common/abstractions';
-import { User } from 'src/infra/database/prisma/generated/client';
+import { User } from 'src/infrastructure/database/prisma/generated/client';
+import { BaseEntity } from 'src/shared/kernel';
 
 export class UserEntity extends BaseEntity implements User {
   name!: string;

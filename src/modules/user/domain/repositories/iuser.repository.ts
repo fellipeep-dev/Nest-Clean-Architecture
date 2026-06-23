@@ -1,4 +1,4 @@
-import { RepositoryFactory } from 'src/common/abstractions';
+import { RepositoryFactory } from 'src/shared/infrastructure';
 import { UserEntity } from '../entities/user.entity';
 import { CreateUserDto } from '../../presentation/dtos/create-user.dto';
 import { UpdateUserDto } from '../../presentation/dtos/update-user.dto';

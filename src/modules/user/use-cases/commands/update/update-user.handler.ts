@@ -2,7 +2,8 @@ import { CommandHandler, EventBus, ICommandHandler } from '@nestjs/cqrs';
 import { UpdateUserCommand } from './update-user.command';
 import { IUserRepository } from 'src/modules/user/domain/repositories/iuser.repository';
 import { IUserValidationService } from 'src/modules/user/use-cases/services/iuser-validation.service';
-import { EntityChangedEvent } from 'src/common/events/entity-changed/entity-changed.event';
+import { EntityChangedEvent } from 'src/shared/events/entity-changed/entity-changed.event';
+import { CacheEntity } from 'src/shared/events/entity-changed/entity-changed.types';
 
 @CommandHandler(UpdateUserCommand)
 export class UpdateUserHandler implements ICommandHandler<UpdateUserCommand> {
@@ -23,7 +24,7 @@ export class UpdateUserHandler implements ICommandHandler<UpdateUserCommand> {
 
     this.eventBus.publish(
       new EntityChangedEvent({
-        entity: 'USERS',
+        entity: CacheEntity.USERS,
         action: 'update',
         id,
         identifiers: {
