@@ -2,7 +2,7 @@
 /dist
 /node_modules
 /build
-/src/infra/database/prisma/generated
+/src/infrastructure/database/prisma/generated
 
 # Logs
 logs
