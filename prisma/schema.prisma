@@ -1,6 +1,6 @@
 generator client {
   provider     = "prisma-client"
-  output       = "../src/infra/database/prisma/generated"
+  output       = "../src/infrastructure/database/prisma/generated"
   moduleFormat = "cjs"
 }
 
