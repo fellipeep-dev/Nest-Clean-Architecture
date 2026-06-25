@@ -22,7 +22,7 @@ async function bootstrap() {
   app.useGlobalFilters(new AllExceptionsFilter());
 
   const config = new DocumentBuilder()
-    .setTitle('VizinhoDAgua')
+    .setTitle('Nest-Clean-Architecture')
     .setVersion('1.0')
     .addBearerAuth()
     .build();
