@@ -19,6 +19,7 @@ import { UpdateUserCommand } from '../../use-cases/commands/update/update-user.c
 import { DeleteUserCommand } from '../../use-cases/commands/delete/delete-user.command';
 import { CreateUserDto } from '../dtos/create-user.dto';
 import { UpdateUserDto } from '../dtos/update-user.dto';
+import { Public } from 'src/shared/decorators';
 
 @Controller('user')
 export class UserController {
@@ -27,6 +28,7 @@ export class UserController {
     private readonly queryBus: QueryBus,
   ) {}
 
+  @Public()
   @Post()
   createUser(@Body() createUserDto: CreateUserDto) {
     return this.commandBus.execute(new CreateUserCommand(createUserDto));

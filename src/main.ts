@@ -24,12 +24,27 @@ async function bootstrap() {
   const config = new DocumentBuilder()
     .setTitle('Nest-Clean-Architecture')
     .setVersion('1.0')
-    .addBearerAuth()
+    .addBearerAuth(
+      {
+        type: 'http',
+        scheme: 'bearer',
+        bearerFormat: 'JWT',
+      },
+      'JWT',
+    )
     .build();
 
-  const documentFactory = () =>
-    SwaggerModule.createDocument(app, config, { deepScanRoutes: true });
-  SwaggerModule.setup('api', app, documentFactory);
+  const document = SwaggerModule.createDocument(app, config, {
+    deepScanRoutes: true,
+  });
+
+  document.security = [
+    {
+      JWT: [],
+    },
+  ];
+
+  SwaggerModule.setup('api', app, document);
 
   await app.listen(port);
 }

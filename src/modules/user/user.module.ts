@@ -23,5 +23,13 @@ import { UserValidationService } from './use-cases/services/user-validation.serv
     { provide: IUserRepository, useClass: UserRepository },
     { provide: IUserValidationService, useClass: UserValidationService },
   ],
+  exports: [
+    CreateUserHandler,
+    FindAllUsersHandler,
+    FindUserByIdHandler,
+    FindUserByEmailHandler,
+    UpdateUserHandler,
+    DeleteUserHandler,
+  ],
 })
 export class UserModule {}
