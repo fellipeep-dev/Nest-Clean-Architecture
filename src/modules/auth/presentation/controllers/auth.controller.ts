@@ -1,9 +1,11 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { SingInAuthDto } from '../dtos/sing-in.auth.dto';
 import { SingInAuthCommand } from '../../use-cases/commands/singIn/sing-in.auth.command';
-import { FindAuthByIdQuery } from '../../use-cases/queries/find-by-id/find-auth-by-id.query';
+import { FindAllAuthsQuery } from '../../use-cases/queries/find-all/find-all-auths.query';
 import { Public } from 'src/shared/decorators';
+import { QueryConditionsPipe } from 'src/shared/pipes';
+import { QueryParamsDto } from 'src/shared-presentation/dtos';
 
 @Controller('auth')
 export class AuthController {
@@ -18,8 +20,8 @@ export class AuthController {
     return this.commandBus.execute(new SingInAuthCommand(singInAuthDto));
   }
 
-  @Get('id/:id')
-  findAuthById(@Param('id') id: string) {
-    return this.queryBus.execute(new FindAuthByIdQuery(id));
+  @Get()
+  findAllAuths(@Query(new QueryConditionsPipe()) query: QueryParamsDto) {
+    return this.queryBus.execute(new FindAllAuthsQuery(query));
   }
 }

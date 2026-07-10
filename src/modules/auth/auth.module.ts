@@ -6,7 +6,7 @@ import { AuthController } from './presentation/controllers/auth.controller';
 import { APP_GUARD } from '@nestjs/core';
 import { AuthGuard } from './guards/auth.guard';
 import { SingInAuthHandler } from './use-cases/commands/singIn/sing-in.auth.handler';
-import { FindAuthByIdHandler } from './use-cases/queries/find-by-id/find-auth-by-id.handler';
+import { FindAllAuthsHandler } from './use-cases/queries/find-all/find-all-auths.handler';
 import { AuthRepository } from './infrastructure/auth.repository';
 import { IAuthRepository } from './domain/repositories/iauth.repository';
 
@@ -31,9 +31,9 @@ import { IAuthRepository } from './domain/repositories/iauth.repository';
       useClass: AuthGuard,
     },
     SingInAuthHandler,
-    FindAuthByIdHandler,
+    FindAllAuthsHandler,
     { provide: IAuthRepository, useClass: AuthRepository },
   ],
-  exports: [SingInAuthHandler, FindAuthByIdHandler, JwtModule],
+  exports: [SingInAuthHandler, FindAllAuthsHandler, JwtModule],
 })
 export class AuthModule {}
