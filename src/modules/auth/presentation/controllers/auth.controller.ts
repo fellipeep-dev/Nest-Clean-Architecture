@@ -6,6 +6,7 @@ import { FindAllAuthsQuery } from '../../use-cases/queries/find-all/find-all-aut
 import { Public } from 'src/shared/decorators';
 import { QueryConditionsPipe } from 'src/shared/pipes';
 import { QueryParamsDto } from 'src/shared-presentation/dtos';
+import { SingOutAuthCommand } from '../../use-cases/commands/singOut/sing-out.auth.command';
 
 @Controller('auth')
 export class AuthController {
@@ -15,9 +16,14 @@ export class AuthController {
   ) {}
 
   @Public()
-  @Post()
+  @Post('singIn')
   singIn(@Body() singInAuthDto: SingInAuthDto) {
     return this.commandBus.execute(new SingInAuthCommand(singInAuthDto));
+  }
+
+  @Post('singOut')
+  singOut(@Param('id') id: string) {
+    return this.commandBus.execute(new SingOutAuthCommand(id));
   }
 
   @Get()

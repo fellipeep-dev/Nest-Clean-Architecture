@@ -9,6 +9,7 @@ import { SingInAuthHandler } from './use-cases/commands/singIn/sing-in.auth.hand
 import { FindAllAuthsHandler } from './use-cases/queries/find-all/find-all-auths.handler';
 import { AuthRepository } from './infrastructure/auth.repository';
 import { IAuthRepository } from './domain/repositories/iauth.repository';
+import { SingOutAuthHandler } from './use-cases/commands/singOut/sing-out.auth.handler';
 
 @Module({
   imports: [
@@ -31,9 +32,15 @@ import { IAuthRepository } from './domain/repositories/iauth.repository';
       useClass: AuthGuard,
     },
     SingInAuthHandler,
+    SingOutAuthHandler,
     FindAllAuthsHandler,
     { provide: IAuthRepository, useClass: AuthRepository },
   ],
-  exports: [SingInAuthHandler, FindAllAuthsHandler, JwtModule],
+  exports: [
+    SingInAuthHandler,
+    SingOutAuthHandler,
+    FindAllAuthsHandler,
+    JwtModule,
+  ],
 })
 export class AuthModule {}
