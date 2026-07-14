@@ -18,7 +18,7 @@ export class AllExceptionsFilter implements ExceptionFilter {
 
     let status = HttpStatus.INTERNAL_SERVER_ERROR;
     let errorCode = 'INTERNAL_SERVER_ERROR';
-    let message = 'Unespected error occurred';
+    let message = 'Unexpected error occurred';
 
     if (exception instanceof HttpException) {
       status = exception.getStatus();
@@ -37,7 +37,7 @@ export class AllExceptionsFilter implements ExceptionFilter {
     if (exception instanceof Prisma.PrismaClientKnownRequestError) {
       switch (exception.code) {
         case 'P2002':
-          status = HttpStatus.BAD_REQUEST;
+          status = HttpStatus.CONFLICT;
           errorCode = 'UNIQUE_CONSTRAINT_VIOLATION';
           message = `Unique constraint failed: ${exception.meta?.target}`;
           break;
