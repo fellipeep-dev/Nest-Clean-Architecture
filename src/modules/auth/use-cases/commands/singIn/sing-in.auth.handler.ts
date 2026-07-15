@@ -8,6 +8,7 @@ import { compare } from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import { EntityChangedEvent } from 'src/shared/events/entity-changed/entity-changed.event';
 import { CacheEntity } from 'src/shared/events/entity-changed/entity-changed.types';
+import { UnauthorizedException } from '@nestjs/common';
 
 @CommandHandler(SingInAuthCommand)
 export class SingInAuthHandler implements ICommandHandler<SingInAuthCommand> {
@@ -24,11 +25,19 @@ export class SingInAuthHandler implements ICommandHandler<SingInAuthCommand> {
     const userQuery = new FindUserByEmailQuery(data.login);
     const user = await this.findUserByEmailHandler.execute(userQuery);
 
-    if (!user) return { access_token: '' };
+    if (!user)
+      throw new UnauthorizedException({
+        errorCode: 'INVALID_CREDENTIALS',
+        message: 'Invalid credentials',
+      });
 
     const passwordIsEqual = await compare(data.password, user?.password);
 
-    if (!passwordIsEqual) return { access_token: '' };
+    if (!passwordIsEqual)
+      throw new UnauthorizedException({
+        errorCode: 'INVALID_CREDENTIALS',
+        message: 'Invalid credentials',
+      });
 
     const auth = await this.authRepository.create({
       userId: user.id,
