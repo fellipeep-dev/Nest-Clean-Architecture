@@ -9,6 +9,7 @@ import { JwtService } from '@nestjs/jwt';
 import { EntityChangedEvent } from 'src/shared/events/entity-changed/entity-changed.event';
 import { CacheEntity } from 'src/shared/events/entity-changed/entity-changed.types';
 import { UnauthorizedException } from '@nestjs/common';
+import { expiresAt } from 'src/modules/auth/domain/consts/expires-at';
 
 @CommandHandler(SingInAuthCommand)
 export class SingInAuthHandler implements ICommandHandler<SingInAuthCommand> {
@@ -41,7 +42,7 @@ export class SingInAuthHandler implements ICommandHandler<SingInAuthCommand> {
 
     const auth = await this.authRepository.create({
       userId: user.id,
-      expiresAt: addDays(new Date(), 30),
+      expiresAt: addDays(new Date(), expiresAt),
     });
 
     const payload = { sub: auth.userId, authId: auth.id };

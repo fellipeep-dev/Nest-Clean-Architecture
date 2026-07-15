@@ -10,6 +10,7 @@ import { FindAllAuthsHandler } from './use-cases/queries/find-all/find-all-auths
 import { AuthRepository } from './infrastructure/auth.repository';
 import { IAuthRepository } from './domain/repositories/iauth.repository';
 import { SingOutAuthHandler } from './use-cases/commands/singOut/sing-out.auth.handler';
+import { expiresAt } from './domain/consts/expires-at';
 
 @Module({
   imports: [
@@ -19,7 +20,7 @@ import { SingOutAuthHandler } from './use-cases/commands/singOut/sing-out.auth.h
       useFactory: (configService: ConfigService) => ({
         secret: configService.get<string>('JWT_ACCESS_TOKEN_SECRET'),
         signOptions: {
-          expiresIn: '1d',
+          expiresIn: `${expiresAt}d`,
         },
       }),
     }),
