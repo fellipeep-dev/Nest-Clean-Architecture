@@ -1,30 +1,29 @@
 import { CommandHandler, EventBus, ICommandHandler } from '@nestjs/cqrs';
 import { SingInAuthCommand } from './sing-in.auth.command';
 import { IAuthRepository } from '../../../domain/repositories/iauth.repository';
-import { FindUserByEmailHandler } from 'src/modules/user/use-cases/queries/find-by-email/find-user-by-email.handler';
-import { FindUserByEmailQuery } from 'src/modules/user/use-cases/queries/find-by-email/find-user-by-email.query';
 import { addDays } from 'date-fns';
 import { compare } from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import { EntityChangedEvent } from 'src/shared/events/entity-changed/entity-changed.event';
 import { CacheEntity } from 'src/shared/events/entity-changed/entity-changed.types';
-import { UnauthorizedException } from '@nestjs/common';
+import { Inject, UnauthorizedException } from '@nestjs/common';
 import { expiresAt } from 'src/modules/auth/domain/consts/expires-at';
+import { IUserRepository } from 'src/modules/user/domain/repositories/iuser.repository';
 
 @CommandHandler(SingInAuthCommand)
 export class SingInAuthHandler implements ICommandHandler<SingInAuthCommand> {
   constructor(
-    private readonly jwtService: JwtService,
-    private readonly findUserByEmailHandler: FindUserByEmailHandler,
-    private readonly eventBus: EventBus,
+    @Inject(IUserRepository)
+    private readonly userRepository: IUserRepository,
     private readonly authRepository: IAuthRepository,
+    private readonly jwtService: JwtService,
+    private readonly eventBus: EventBus,
   ) {}
 
   async execute(command: SingInAuthCommand): Promise<{ access_token: string }> {
     const { data } = command;
 
-    const userQuery = new FindUserByEmailQuery(data.login);
-    const user = await this.findUserByEmailHandler.execute(userQuery);
+    const user = await this.userRepository.findByEmail(data.login);
 
     if (!user)
       throw new UnauthorizedException({

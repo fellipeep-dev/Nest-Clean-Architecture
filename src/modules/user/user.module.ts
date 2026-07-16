@@ -30,6 +30,7 @@ import { UserValidationService } from './use-cases/services/user-validation.serv
     FindUserByEmailHandler,
     UpdateUserHandler,
     DeleteUserHandler,
+    IUserRepository,
   ],
 })
 export class UserModule {}
