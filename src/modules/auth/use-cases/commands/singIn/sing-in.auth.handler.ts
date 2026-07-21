@@ -2,13 +2,13 @@ import { CommandHandler, EventBus, ICommandHandler } from '@nestjs/cqrs';
 import { SingInAuthCommand } from './sing-in.auth.command';
 import { IAuthRepository } from '../../../domain/repositories/iauth.repository';
 import { addDays } from 'date-fns';
-import { compare } from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import { EntityChangedEvent } from 'src/shared/events/entity-changed/entity-changed.event';
 import { CacheEntity } from 'src/shared/events/entity-changed/entity-changed.types';
 import { Inject, UnauthorizedException } from '@nestjs/common';
 import { expiresAt } from 'src/modules/auth/domain/consts/expires-at';
 import { IUserRepository } from 'src/modules/user/domain/repositories/iuser.repository';
+import { compare } from 'src/shared/utils';
 
 @CommandHandler(SingInAuthCommand)
 export class SingInAuthHandler implements ICommandHandler<SingInAuthCommand> {
@@ -31,7 +31,7 @@ export class SingInAuthHandler implements ICommandHandler<SingInAuthCommand> {
         message: 'Invalid credentials',
       });
 
-    const passwordIsEqual = await compare(data.password, user?.password);
+    const passwordIsEqual = await compare(data.password, user.password);
 
     if (!passwordIsEqual)
       throw new UnauthorizedException({
