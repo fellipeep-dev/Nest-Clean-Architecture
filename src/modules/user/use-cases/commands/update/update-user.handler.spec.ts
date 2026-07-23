@@ -4,14 +4,14 @@ import { UserValidationService } from 'src/modules/user/use-cases/services/user-
 import { UserInMemoryRepository } from 'src/modules/user/infrastructure/user.in-memory-repository';
 import { UpdateUserCommand } from './update-user.command';
 import { updateUserDtoMock } from 'src/modules/user/domain/mocks/update-user.dto.mock';
-import { AppError } from 'src/shared/errors';
 import { HttpStatus } from '@nestjs/common';
 import { createUserDtoMock } from 'src/modules/user/domain/mocks/create-user.dto.mock';
+import { IUserValidationService } from '../../services/iuser-validation.service';
 
 describe('UpdateUserHandler', () => {
   let sut: UpdateUserHandler;
   let userRepository: IUserRepository;
-  let userValidationService: UserValidationService;
+  let userValidationService: IUserValidationService;
 
   const eventBus = {
     publish: jest.fn(),
@@ -109,22 +109,16 @@ describe('UpdateUserHandler', () => {
 
   it('given a duplicated email, when updating user, then it should throw conflict exception and not publish event', async () => {
     //Arrange
-    const existingUser = await userRepository.create(createUserDtoMock);
-    const id = existingUser.id;
+    await userRepository.create({
+      ...createUserDtoMock,
+      email: 'existingEmail@gmail.com',
+    });
+    const user = await userRepository.create(createUserDtoMock);
+    const id = user.id;
     const userCommand = new UpdateUserCommand(id, {
       ...updateUserDtoMock,
-      email: 'string',
+      email: 'existingEmail@gmail.com',
     });
-
-    jest
-      .spyOn(userValidationService, 'isEmailUnique')
-      .mockRejectedValue(
-        new AppError(
-          'Email already in use',
-          HttpStatus.CONFLICT,
-          'EMAIL_ALREADY_IN_USE',
-        ),
-      );
 
     //Act + Assert
     await expect(sut.execute(userCommand)).rejects.toMatchObject({
@@ -133,25 +127,20 @@ describe('UpdateUserHandler', () => {
       errorCode: 'EMAIL_ALREADY_IN_USE',
     });
 
-    expect(userValidationService.isEmailUnique).toHaveBeenCalledWith('string');
+    expect(userValidationService.isEmailUnique).toHaveBeenCalledWith(
+      'existingEmail@gmail.com',
+    );
 
     expect(eventBus.publish).not.toHaveBeenCalled();
   });
 
   it('given a non-existing user id, when updating user, then it should throw not found exception and not proceed', async () => {
     //Arrange
-    const existingUser = await userRepository.create(createUserDtoMock);
-    const id = existingUser.id;
-    const userCommand = new UpdateUserCommand(id, {
+    await userRepository.create(createUserDtoMock);
+    const userCommand = new UpdateUserCommand('fake_id', {
       ...updateUserDtoMock,
       email: 'string',
     });
-
-    jest
-      .spyOn(userValidationService, 'doesExist')
-      .mockRejectedValue(
-        new AppError('User not found', HttpStatus.NOT_FOUND, 'USER_NOT_FOUND'),
-      );
 
     //Act + Assert
     await expect(sut.execute(userCommand)).rejects.toMatchObject({
