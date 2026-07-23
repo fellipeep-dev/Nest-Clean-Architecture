@@ -4,7 +4,8 @@ import { CreateAuthDto } from '../../presentation/dtos/create-auth.dto';
 
 export abstract class IAuthRepository extends RepositoryFactory<
   AuthEntity,
-  CreateAuthDto
+  CreateAuthDto,
+  { expiresAt: Date }
 > {
   constructor() {
     super('auth');

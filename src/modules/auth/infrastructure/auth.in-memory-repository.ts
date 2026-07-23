@@ -49,6 +49,20 @@ export class AuthInMemoryRepository extends IAuthRepository {
     return this.auths.find((auth) => auth.id === id) ?? null;
   }
 
+  async update(
+    id: string,
+    updateDto: { expiresAt: Date },
+  ): Promise<AuthEntity> {
+    const auth = this.auths.find((auth) => auth.id === id);
+
+    if (!auth) throw new Error('Auth not found');
+
+    Object.assign(auth, updateDto);
+    auth.updatedAt = new Date();
+
+    return auth;
+  }
+
   async softDelete(id: string): Promise<AuthEntity> {
     const auth = this.auths.find((auth) => auth.id === id);
 

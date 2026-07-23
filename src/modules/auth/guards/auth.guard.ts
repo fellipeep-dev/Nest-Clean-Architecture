@@ -2,16 +2,19 @@ import {
   CanActivate,
   ExecutionContext,
   Injectable,
+  NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { JwtService } from '@nestjs/jwt';
 import { Request } from 'express';
 import { IS_PUBLIC_KEY } from 'src/shared/decorators';
+import { IAuthRepository } from '../domain/repositories/iauth.repository';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
   constructor(
+    private readonly authRepository: IAuthRepository,
     private readonly reflector: Reflector,
     private readonly jwtService: JwtService,
   ) {}
@@ -35,6 +38,20 @@ export class AuthGuard implements CanActivate {
 
     try {
       const payload = await this.jwtService.verifyAsync(token);
+
+      const auth = await this.authRepository.findById(payload.authId);
+
+      if (!auth)
+        throw new NotFoundException({
+          errorCode: 'AUTH_NOT_FOUNDED',
+          message: 'Auth is not founded',
+        });
+
+      if (auth.expiresAt <= new Date())
+        throw new UnauthorizedException({
+          errorCode: 'INVALID_TOKEN',
+          message: 'Invalid or expired token',
+        });
 
       request['user'] = payload;
     } catch {

@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Put, Query } from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { SingInAuthDto } from '../dtos/sing-in.auth.dto';
 import { SingInAuthCommand } from '../../use-cases/commands/singIn/sing-in.auth.command';
@@ -21,7 +21,7 @@ export class AuthController {
     return this.commandBus.execute(new SingInAuthCommand(singInAuthDto));
   }
 
-  @Post('singOut')
+  @Put('singOut/id/:id')
   singOut(@Param('id') id: string) {
     return this.commandBus.execute(new SingOutAuthCommand(id));
   }
