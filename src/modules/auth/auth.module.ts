@@ -11,6 +11,8 @@ import { AuthRepository } from './infrastructure/auth.repository';
 import { IAuthRepository } from './domain/repositories/iauth.repository';
 import { SingOutAuthHandler } from './use-cases/commands/singOut/sing-out.auth.handler';
 import { expiresAt } from './domain/consts/expires-at';
+import { IAuthValidationService } from './use-cases/services/iauth-validation.service';
+import { AuthValidationService } from './use-cases/services/auth-validation.service';
 
 @Module({
   imports: [
@@ -36,6 +38,7 @@ import { expiresAt } from './domain/consts/expires-at';
     SingOutAuthHandler,
     FindAllAuthsHandler,
     { provide: IAuthRepository, useClass: AuthRepository },
+    { provide: IAuthValidationService, useClass: AuthValidationService },
   ],
   exports: [
     SingInAuthHandler,
